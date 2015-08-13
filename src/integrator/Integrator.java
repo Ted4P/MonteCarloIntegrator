@@ -1,4 +1,7 @@
 package integrator;
+
+import org.scilab.forge.jlatexmath.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,8 +11,12 @@ import evaluator.Var;
 
 import javax.swing.*;
 import javax.swing.event.*;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+
+
 
 public class Integrator extends javax.swing.JFrame {
 	
@@ -26,6 +33,8 @@ public class Integrator extends javax.swing.JFrame {
 	//results
 	private JLabel avgval;
 	private JLabel area;
+	private JLabel integral;
+	private double areaVal;
 	
 	//variables to store text field data
 	private String eq; //equation
@@ -65,6 +74,7 @@ public class Integrator extends javax.swing.JFrame {
 		sam = Integer.parseInt(samples.getText());
 		
 		eval.parse(eq);
+		
 		ArrayList<KeyPair> var = eval.getKeys();
 		if(var.size()!=1) System.out.println("BAD NUMBER OF VARIABLES!");
 		double sum = 0;
@@ -74,8 +84,16 @@ public class Integrator extends javax.swing.JFrame {
 		}
 		sum/=sam;
 		
+		areaVal = (ub-lb)*sum;
+		
 		avgval.setText(sum+"");
-		area.setText(((ub-lb)*sum)+"");
+		area.setText(areaVal+"");
+		
+		
+		
+		latexRender();
+		
+		pack();
 		
 		
 		//sum= average function value
@@ -87,10 +105,27 @@ public class Integrator extends javax.swing.JFrame {
 	}
 	
 	
+	private void latexRender(){
+		
+		String form = "\\int_{" + lb + "}^{" + ub + "}" + eq + "\\, dx \\approx" + areaVal;
+		
+		TeXFormula formula = new TeXFormula (form);
+		
+		TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
+				
+		BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+		icon.paintIcon(new JLabel(), image.getGraphics(), 0, 0);
+		
+		
+		integral.setIcon(icon);
+		
+	}
+	
 	
 	private void initText(){
 		//top title
 		final JLabel TITLE = new JLabel("Monte Carlo Integrator", SwingConstants.CENTER);
+		c.ipady=15;
 		c.gridx=0;
 		c.gridy=0;
 		c.gridwidth=3;
@@ -100,20 +135,11 @@ public class Integrator extends javax.swing.JFrame {
 		entireGUI.add(TITLE,c);
 		
 		
-		/** REMOVED FOR NOW TO SEE IF JLATEXMATH WILL WORK
-		//integral symbol
-		JLabel intsymbol = new JLabel();
-		intsymbol.setIcon(new ImageIcon(getClass().getResource("image/int.png")));
-		c.gridx=0;
-		c.gridy=1;
-		c.gridwidth=6;
-		c.gridheight=3;
-		c.fill=GridBagConstraints.NONE;
-		entireGUI.add(intsymbol,c);
-		*/ 
+		
 		
 		//latex equation
-		JLabel integral = new JLabel("WHERE THE LATEX WILL GO");
+		integral = new JLabel();
+		c.ipady=0;
 		c.gridwidth=2;
 		c.gridx=0;
 		c.gridy=1;
@@ -202,6 +228,7 @@ public class Integrator extends javax.swing.JFrame {
 				}
 			}
 		});
+		c.ipadx=50;
 		c.gridx=2;
 		c.gridy=1;
 		c.weightx=0.4;
@@ -209,7 +236,7 @@ public class Integrator extends javax.swing.JFrame {
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(perform,c);
 		
-		final JLabel AVGVAL = new JLabel("Average Value");
+		final JLabel AVGVAL = new JLabel("Average Value",SwingConstants.CENTER);
 		c.gridx=2;
 		c.gridy=2;
 		c.weightx=0.4;
@@ -217,7 +244,7 @@ public class Integrator extends javax.swing.JFrame {
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(AVGVAL,c);
 		
-		avgval = new JLabel("");
+		avgval = new JLabel("",SwingConstants.CENTER);
 		c.gridx=2;
 		c.gridy=3;
 		c.weightx=0.4;
@@ -226,7 +253,7 @@ public class Integrator extends javax.swing.JFrame {
 		entireGUI.add(avgval,c);
 		
 		
-		final JLabel AREA = new JLabel("Area Under Curve");
+		final JLabel AREA = new JLabel("Area Under Curve",SwingConstants.CENTER);
 		c.gridx=2;
 		c.gridy=4;
 		c.weightx=0.4;
@@ -234,7 +261,7 @@ public class Integrator extends javax.swing.JFrame {
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(AREA,c);
 		
-		area = new JLabel("");
+		area = new JLabel("",SwingConstants.CENTER);
 		c.gridx=2;
 		c.gridy=5;
 		c.weightx=0.4;
