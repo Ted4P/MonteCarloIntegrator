@@ -58,18 +58,28 @@ public class Integrator extends javax.swing.JFrame {
 	}
 	
 	
-	private void calculate (){
+	private void calculate () throws Exception{
 		eq = equation.getText();
 		lb = Double.parseDouble(lbound.getText());
 		ub = Double.parseDouble(ubound.getText());
 		sam = Integer.parseInt(samples.getText());
 		
 		eval.parse(eq);
+		ArrayList<KeyPair> var = eval.getKeys();
+		if(var.size()!=1) System.out.println("BAD NUMBER OF VARIABLES!");
+		double sum = 0;
+		for(int i = 0; i < sam; i++){
+			var.get(0).setVal(randInBound());
+			sum+= eval.evaluate(var);
+		}
+		sum/=sam;
 		
-		
-		
-		
-		
+		//sum= average function value
+		//(ub-lb)*sum= area under curve
+	}
+	
+	private double randInBound(){
+		return lb + ((ub-lb)*Math.random());
 	}
 	
 	
@@ -181,7 +191,11 @@ public class Integrator extends javax.swing.JFrame {
 		perform.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
 			{
-				calculate();
+				try {
+					calculate();
+				} catch (Exception e1) {
+					System.out.println("Parse failed!");
+				}
 			}
 		});
 		c.gridx=2;
