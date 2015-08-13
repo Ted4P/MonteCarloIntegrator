@@ -67,17 +67,17 @@ public class Node {
 	}
 	
 	public double eval() throws Exception {
-		return eval(null,null);
+		return eval(null);
 	}
 	
-	public double eval(ArrayList<String> keys, ArrayList<Double> vals) throws Exception{
+	public double eval(ArrayList<KeyPair> keys) throws Exception{
 		if(mainFunc.isAVar()){
 			String thisKey = ((Var)mainFunc).getKey();
-			if(keys==null || vals==null || keys.size()!=vals.size()) throw new Exception();
-			for(int i = 0; i < keys.size(); i++){
-				if(keys.get(i).equals(thisKey)){
+			if(keys==null) throw new Exception();
+			for(KeyPair key: keys){
+				if(key.getKey().equals(thisKey)){
 					ArrayList<Double> val = new ArrayList<Double>();
-					val.add(vals.get(i));
+					val.add(key.getVal());
 					 return mainFunc.eval(val);
 				}
 			}
@@ -87,37 +87,37 @@ public class Node {
 		
 		ArrayList<Double> subEval = new ArrayList<Double>();
 		for(Node child: children){
-			subEval.add(child.eval(keys, vals));
+			subEval.add(child.eval(keys));
 		}
 		return mainFunc.eval(subEval);
 	}
 
 
-	public ArrayList<String> getKeys() {
+	public ArrayList<KeyPair> getKeys() {
 		if(children == null || children.size() == 0){
-			ArrayList<String> keys = new ArrayList<String>();
+			ArrayList<KeyPair> keys = new ArrayList<KeyPair>();
 			if(mainFunc.isAVar()){
-				keys.add(((Var) mainFunc).getKey());
+				keys.add(new KeyPair(((Var) mainFunc).getKey()));
 			}
 			return keys;
 		}
 		if(children.size()==1){
 			return children.get(0).getKeys();
 		}
-		ArrayList<String> child1 = children.get(0).getKeys();
-		ArrayList<String> child2 = children.get(1).getKeys();
+		ArrayList<KeyPair> child1 = children.get(0).getKeys();
+		ArrayList<KeyPair> child2 = children.get(1).getKeys();
 		int i = 0;
 		while(i < child1.size()){	//Delete duplicate keys
 			int j = 0;
 			while(j < child2.size()){
-				if(child1.get(i).equals(child2.get(j)))
+				if(child1.get(i).getKey().equals(child2.get(j).getKey()))
 					child2.remove(j);
 				else
 					j++;
 			}
 			i++;
 		}
-		for(String key: child2){	//Add the remaining second list on to the first
+		for(KeyPair key: child2){	//Add the remaining second list on to the first
 			child1.add(key);
 		}
 		return child1;
