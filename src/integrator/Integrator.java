@@ -74,6 +74,10 @@ public class Integrator extends javax.swing.JFrame {
 		}
 		sum/=sam;
 		
+		avgval.setText(sum+"");
+		area.setText(((ub-lb)*sum)+"");
+		
+		
 		//sum= average function value
 		//(ub-lb)*sum= area under curve
 	}
