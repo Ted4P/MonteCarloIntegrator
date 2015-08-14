@@ -52,10 +52,8 @@ public class Integrator extends javax.swing.JFrame {
 		
 		eval = new Evaluator();
 		
-		
+		samples.setText("500000");
 		initText();
-		
-		
 		
 		add(entireGUI);
 		pack();
@@ -87,16 +85,11 @@ public class Integrator extends javax.swing.JFrame {
 		
 		avgval.setText(sum+"");
 		area.setText((ub-lb)*sum+"");
-		
-		
-		
+
 		latexRender();
 		
 		pack();
 		
-		
-		//sum= average function value
-		//(ub-lb)*sum= area under curve
 	}
 	
 	private double randInBound(){
@@ -133,9 +126,6 @@ public class Integrator extends javax.swing.JFrame {
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(TITLE,c);
 		
-		
-		
-		
 		//latex equation
 		integral = new JLabel("",SwingConstants.CENTER);
 		c.ipady=0;
@@ -146,7 +136,6 @@ public class Integrator extends javax.swing.JFrame {
 		c.weighty=0.3;
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(integral,c);
-		
 		
 		//input data labels
 		final JLabel EQUATION = new JLabel("Equation: ",SwingConstants.RIGHT);
@@ -182,8 +171,7 @@ public class Integrator extends javax.swing.JFrame {
 		c.weightx=0.3;
 		c.weighty=0.2;
 		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(SAMPLES,c);
-		
+		entireGUI.add(SAMPLES,c);	
 		
 		//input text fields
 		c.ipadx=0;
@@ -215,8 +203,6 @@ public class Integrator extends javax.swing.JFrame {
 		c.weighty=0.2;
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(samples,c);
-		
-		
 		
 		//calculation side
 		final JButton perform = new JButton("INTEGRATE!");
@@ -271,12 +257,9 @@ public class Integrator extends javax.swing.JFrame {
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(area,c);
 	}
-	
-
 
 	public static void main(String[] args){
 		new Integrator();
-		
 	}
 }
 
