@@ -2,15 +2,13 @@ package integrator;
 
 import org.scilab.forge.jlatexmath.*;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import evaluator.Evaluator;
 import evaluator.KeyPair;
-import evaluator.Var;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -34,7 +32,7 @@ public class Integrator extends javax.swing.JFrame {
 	private JLabel avgval;
 	private JLabel area;
 	private JLabel integral;
-	private double areaVal;
+	private String areaStr;
 	
 	//variables to store text field data
 	private String eq; //equation
@@ -84,10 +82,11 @@ public class Integrator extends javax.swing.JFrame {
 		}
 		sum/=sam;
 		
-		areaVal = (ub-lb)*sum;
+		DecimalFormat df = new DecimalFormat("####0.00000");
+		areaStr = df.format((ub-lb)*sum);
 		
 		avgval.setText(sum+"");
-		area.setText(areaVal+"");
+		area.setText((ub-lb)*sum+"");
 		
 		
 		
@@ -107,7 +106,7 @@ public class Integrator extends javax.swing.JFrame {
 	
 	private void latexRender(){
 		
-		String form = "\\int_{" + lb + "}^{" + ub + "}" + eq + "\\, dx \\approx" + areaVal;
+		String form = "\\int_{" + lb + "}^{" + ub + "}" + eq + "\\, dx \\approx" + areaStr;
 		
 		TeXFormula formula = new TeXFormula (form);
 		
@@ -138,7 +137,7 @@ public class Integrator extends javax.swing.JFrame {
 		
 		
 		//latex equation
-		integral = new JLabel();
+		integral = new JLabel("",SwingConstants.CENTER);
 		c.ipady=0;
 		c.gridwidth=2;
 		c.gridx=0;
