@@ -150,6 +150,7 @@ public class Integrator extends javax.swing.JFrame {
 		
 		//input data labels
 		final JLabel EQUATION = new JLabel("Equation: ",SwingConstants.RIGHT);
+		c.ipadx=15;
 		c.gridwidth=1;
 		c.gridx=0;
 		c.gridy=2;
@@ -174,7 +175,8 @@ public class Integrator extends javax.swing.JFrame {
 		c.fill=GridBagConstraints.HORIZONTAL;
 		entireGUI.add(UBOUND,c);
 		
-		final JLabel SAMPLES = new JLabel("Samples: ",SwingConstants.RIGHT);
+		final JLabel SAMPLES = new JLabel("# of Samples: ",SwingConstants.RIGHT);
+		c.ipady=40;
 		c.gridx=0;
 		c.gridy=5;
 		c.weightx=0.3;
@@ -184,7 +186,8 @@ public class Integrator extends javax.swing.JFrame {
 		
 		
 		//input text fields
-		
+		c.ipadx=0;
+		c.ipady=0;
 		c.gridx=1;
 		c.gridy=2;
 		c.weightx=0.3;
