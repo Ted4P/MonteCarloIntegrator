@@ -91,7 +91,9 @@ public class Lexer {
 		for(String name: funcNames){
 			if(pointer + name.length() < function.length() && function.substring(pointer, pointer+ name.length()).equals(name)){
 				pointer += name.length();
-				return funcs.get(name);
+				Func func = funcs.get(name);
+				if(((Operand) func).getNumVals()==1 && lexed.size()!=0 && (lexed.get(lexed.size()-1) instanceof Number || lexed.get(lexed.size()-1) instanceof Var))  lexed.add(new Mul());
+				return func;
 			}
 		}
 		return null;
