@@ -1,5 +1,6 @@
 package evaluator;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Node {
 	private Operand mainFunc;
@@ -70,18 +71,14 @@ public class Node {
 		return eval(null);
 	}
 	
-	public double eval(ArrayList<KeyPair> keys) throws Exception{
+	public double eval(Map<String, Double> keys) throws Exception{
 		if(mainFunc instanceof Var){
-			String thisKey = ((Var)mainFunc).getKey();
-			if(keys==null) throw new Exception();
-			for(KeyPair key: keys){
-				if(key.getKey().equals(thisKey)){
-					ArrayList<Double> val = new ArrayList<Double>();
-					val.add(key.getVal());
-					 return mainFunc.eval(val);
-				}
-			}
-			throw new Exception();
+			String key = ((Var)mainFunc).getKey();
+			if(!keys.containsKey(key)) throw new Exception();
+			
+			ArrayList<Double> val = new ArrayList<Double>();
+			val.add(keys.get(key));
+			return mainFunc.eval(val);
 		}
 		if(mainFunc instanceof Number) return mainFunc.eval(null);
 		
@@ -93,33 +90,16 @@ public class Node {
 	}
 
 
-	public ArrayList<KeyPair> getKeys() {
+	public void addKeys(Map<String, Double> map) {
 		if(children == null || children.size() == 0){
-			ArrayList<KeyPair> keys = new ArrayList<KeyPair>();
-			if(mainFunc.isAVar()){
-				keys.add(new KeyPair(((Var) mainFunc).getKey()));
+			if(mainFunc instanceof Var){
+				map.put(((Var)mainFunc).getKey(), null);
 			}
-			return keys;
+			return;
 		}
-		if(children.size()==1){
-			return children.get(0).getKeys();
+		for(Node child: children){
+			child.addKeys(map);
 		}
-		ArrayList<KeyPair> child1 = children.get(0).getKeys();
-		ArrayList<KeyPair> child2 = children.get(1).getKeys();
-		int i = 0;
-		while(i < child1.size()){	//Delete duplicate keys
-			int j = 0;
-			while(j < child2.size()){
-				if(child1.get(i).getKey().equals(child2.get(j).getKey()))
-					child2.remove(j);
-				else
-					j++;
-			}
-			i++;
-		}
-		for(KeyPair key: child2){	//Add the remaining second list on to the first
-			child1.add(key);
-		}
-		return child1;
+		return;
 	}
 }

@@ -3,10 +3,10 @@ package integrator;
 import org.scilab.forge.jlatexmath.*;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import evaluator.Evaluator;
-import evaluator.KeyPair;
 
 import javax.swing.*;
 
@@ -71,12 +71,16 @@ public class Integrator extends javax.swing.JFrame {
 		
 		eval.parse(eq);
 		
-		ArrayList<KeyPair> var = eval.getKeys();
-		if(var.size()!=1) System.out.println("BAD NUMBER OF VARIABLES!");
+		Map<String, Double> varSet = eval.getKeys();
+		Set<String> vars = varSet.keySet();
+		
+		if(vars.size()!=1) System.out.println("BAD NUMBER OF VARIABLES!");
+		String key = vars.iterator().next();
+		
 		double sum = 0;
 		for(int i = 0; i < sam; i++){
-			var.get(0).setVal(randInBound());
-			sum+= eval.evaluate(var);
+			varSet.put(key, randInBound());
+			sum+= eval.evaluate(varSet);
 		}
 		sum/=sam;
 		
