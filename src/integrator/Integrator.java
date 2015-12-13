@@ -69,6 +69,7 @@ public class Integrator extends javax.swing.JFrame {
 		ub = Double.parseDouble(ubound.getText());
 		sam = Integer.parseInt(samples.getText());
 		
+		System.out.println("Parsing...");
 		eval.parse(eq);
 		
 		Map<String, Double> varSet = eval.getKeys();
@@ -77,15 +78,19 @@ public class Integrator extends javax.swing.JFrame {
 		if(vars.size()!=1){ System.out.println("BAD NUMBER OF VARIABLES!"); return;}
 		String key = vars.iterator().next();
 		
+		System.out.println("Evaluating function...");
 		double[][] vals = new double[sam][2];
 		for(int i = 0; i < vals.length; i++){ 
 			vals[i][0] = randInBound();
 			varSet.put(key, vals[i][0]); 
 			vals[i][1] = eval.evaluate(varSet);
 		}
+		
+		System.out.println("Sorting output...");
 		MergeSort sorter = new MergeSort();
 		sorter.sort(vals);
 		
+		System.out.println("Calculating trapezoid sum...");
 		double sum = 0;
 		for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
 			double height = (vals[i][1]+vals[i+1][1])/2;
