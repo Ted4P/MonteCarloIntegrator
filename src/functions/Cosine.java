@@ -1,7 +1,9 @@
-package evaluator;
+package functions;
 import java.util.ArrayList;
 
-public class Tangent extends Operand {
+import evaluator.Operand;
+
+public class Cosine extends Operand {
 
 	public int getNumVals() {
 		return 1;
@@ -10,9 +12,9 @@ public class Tangent extends Operand {
 	public int getOrderOps(){return 2;}
 
 	public double eval(ArrayList<Double> vals) {
-		return Math.tan(vals.get(0));
+		return Math.cos(vals.get(0));
 	}
 
-	public String toString(){return "tan";}
+	public String toString(){return "cos";}
 
 }

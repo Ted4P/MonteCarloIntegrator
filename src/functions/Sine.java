@@ -1,9 +1,9 @@
-package evaluator;
-
+package functions;
 import java.util.ArrayList;
 
+import evaluator.Operand;
 
-public class Sqrt extends Operand {
+public class Sine extends Operand {
 
 	public int getNumVals() {
 		return 1;
@@ -12,9 +12,9 @@ public class Sqrt extends Operand {
 	public int getOrderOps(){return 2;}
 
 	public double eval(ArrayList<Double> vals) {
-		return Math.sqrt(vals.get(0));
+		return Math.sin(vals.get(0));
 	}
 
-	public String toString(){return "sqrt";}
+	public String toString(){return "sin";}
 
 }

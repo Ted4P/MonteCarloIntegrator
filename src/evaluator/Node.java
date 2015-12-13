@@ -71,7 +71,7 @@ public class Node {
 	}
 	
 	public double eval(ArrayList<KeyPair> keys) throws Exception{
-		if(mainFunc.isAVar()){
+		if(mainFunc instanceof Var){
 			String thisKey = ((Var)mainFunc).getKey();
 			if(keys==null) throw new Exception();
 			for(KeyPair key: keys){
@@ -83,7 +83,7 @@ public class Node {
 			}
 			throw new Exception();
 		}
-		if(mainFunc.isANumber()) return mainFunc.eval(null);
+		if(mainFunc instanceof Number) return mainFunc.eval(null);
 		
 		ArrayList<Double> subEval = new ArrayList<Double>();
 		for(Node child: children){

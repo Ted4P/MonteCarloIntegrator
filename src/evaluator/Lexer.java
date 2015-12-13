@@ -1,5 +1,18 @@
 package evaluator;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+
+import functions.Add;
+import functions.Cosine;
+import functions.Div;
+import functions.Exp;
+import functions.Mul;
+import functions.Sine;
+import functions.Sqrt;
+import functions.Sub;
+import functions.Tangent;
+import functions.UnaryMinus;
 
 
 public class Lexer {
@@ -35,12 +48,13 @@ public class Lexer {
 				if(next.isANumber()) lexed.add(i+1, new Mul());
 				else if(next.isAParen() && ((Paren)next).isOpening()) lexed.add(i+1, new Mul());
 			}
-			if(lexed.get(i).isAParen()){
-				if((!((Paren) lexed.get(i)).isOpening())&&((Paren) lexed.get(i+1)).isOpening()) lexed.add(i+1, new Mul());	//If )(, add a *
+			if(lexed.get(i) instanceof Paren && lexed.get(i+1) instanceof Paren){
+				if(lexed.get(i) instanceof CloseParen && lexed.get(i+1) instanceof OpenParen) lexed.add(i+1, new Mul());	//If )(, add a *
 			}
 			i++;
 		}
-		if(lexed.size() > 1 && lexed.get(lexed.size()-1).isANumber() && lexed.get(lexed.size()-2).isAParen()) lexed.add(lexed.size()-1, new Mul());	//Check if final characters look like this: )4 or )Y
+		Func last = lexed.get(lexed.size()-1);
+		if(lexed.size() > 1 && (last instanceof Number || last instanceof Var)  && lexed.get(lexed.size()-2) instanceof Paren) lexed.add(lexed.size()-1, new Mul());	//Check if final characters look like this: )4 or )Y
 	}
 	
 	private static String removeSpaces(String function) {	

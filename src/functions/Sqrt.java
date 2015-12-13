@@ -1,7 +1,11 @@
-package evaluator;
+package functions;
+
 import java.util.ArrayList;
 
-public class Cosine extends Operand {
+import evaluator.Operand;
+
+
+public class Sqrt extends Operand {
 
 	public int getNumVals() {
 		return 1;
@@ -10,9 +14,9 @@ public class Cosine extends Operand {
 	public int getOrderOps(){return 2;}
 
 	public double eval(ArrayList<Double> vals) {
-		return Math.cos(vals.get(0));
+		return Math.sqrt(vals.get(0));
 	}
 
-	public String toString(){return "cos";}
+	public String toString(){return "sqrt";}
 
 }

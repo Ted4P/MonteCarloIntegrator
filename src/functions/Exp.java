@@ -1,5 +1,7 @@
-package evaluator;
+package functions;
 import java.util.ArrayList;
+
+import evaluator.Operand;
 
 public class Exp extends Operand {
 
