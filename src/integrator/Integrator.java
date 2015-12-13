@@ -71,6 +71,9 @@ public class Integrator extends javax.swing.JFrame {
 		
 		eval.parse(eq);
 		
+		/*double[] ints = new double[sam];
+		for(int i = 0; i < ints.length; i++) ints[i] = randInBound();*/
+		
 		Map<String, Double> varSet = eval.getKeys();
 		Set<String> vars = varSet.keySet();
 		

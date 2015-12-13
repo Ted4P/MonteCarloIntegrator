@@ -1,5 +1,6 @@
 package evaluator;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class Var extends Operand{
@@ -24,6 +25,10 @@ public class Var extends Operand{
 
 	public double eval(ArrayList<Double> vals) {
 		return vals.get(0);
+	}
+	
+	public double eval(Map<String, Double> vals){
+		return vals.get(key).doubleValue();
 	}
 
 	public int getOrderOps() {

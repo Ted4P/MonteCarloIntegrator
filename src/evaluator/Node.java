@@ -73,12 +73,7 @@ public class Node {
 	
 	public double eval(Map<String, Double> keys) throws Exception{
 		if(mainFunc instanceof Var){
-			String key = ((Var)mainFunc).getKey();
-			if(!keys.containsKey(key)) throw new Exception();
-			
-			ArrayList<Double> val = new ArrayList<Double>();
-			val.add(keys.get(key));
-			return mainFunc.eval(val);
+			return ((Var)mainFunc).eval(keys);
 		}
 		if(mainFunc instanceof Number) return mainFunc.eval(null);
 		
