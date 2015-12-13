@@ -36,10 +36,10 @@ public class Node {
 
 	private boolean stripLeadTail(ArrayList<Func> function) {
 		int currParenLevel = 1;
-		if(!(function.get(0).isAParen()&& function.get(function.size() - 1).isAParen())) return false; 	//If the func does not start+end with ( and ), exit
+		if(!(function.get(0) instanceof Paren && function.get(function.size() - 1) instanceof Paren)) return false; 	//If the func does not start+end with ( and ), exit
 		for(int i = 1; i < function.size() - 1; i++){	//If the paren depth is ever ==0 before the end, exit
-			if(function.get(i).isAParen()){
-				if(((Paren)function.get(i)).isOpening()) currParenLevel++;
+			if(function.get(i) instanceof Paren){
+				if(function.get(i) instanceof OpenParen) currParenLevel++;
 				else currParenLevel--;
 			}
 			if(currParenLevel==0) return false;
@@ -55,8 +55,8 @@ public class Node {
 		int parenNum=0;
 		for(int i = 0; i < function.size(); i++){
 			Func temp = function.get(i);
-			if(temp.isAParen()){
-				if(((Paren) temp).isOpening()) parenNum++;
+			if(temp instanceof Paren){
+				if(temp instanceof OpenParen) parenNum++;
 				else parenNum--;
 			}
 			if(parenNum == 0 && temp.getOrderOps()>highestOp){

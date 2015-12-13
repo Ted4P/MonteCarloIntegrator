@@ -46,7 +46,7 @@ public class Lexer {
 			if(lexed.get(i).isANumber()){
 				Func next = lexed.get(i+1);
 				if(next.isANumber()) lexed.add(i+1, new Mul());
-				else if(next.isAParen() && ((Paren)next).isOpening()) lexed.add(i+1, new Mul());
+				else if(next instanceof OpenParen) lexed.add(i+1, new Mul());
 			}
 			if(lexed.get(i) instanceof Paren && lexed.get(i+1) instanceof Paren){
 				if(lexed.get(i) instanceof CloseParen && lexed.get(i+1) instanceof OpenParen) lexed.add(i+1, new Mul());	//If )(, add a *

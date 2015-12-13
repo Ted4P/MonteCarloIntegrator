@@ -9,9 +9,7 @@ public class Number extends Operand{
 		this.val = val;
 	}
 	
-	public boolean isAParen() {return false;}
 	public boolean isANumber() {return true;}
-	public boolean isAFunction() {return true;}
 
 	public String toString(){return ""+val;}
 

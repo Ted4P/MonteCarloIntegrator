@@ -71,27 +71,35 @@ public class Integrator extends javax.swing.JFrame {
 		
 		eval.parse(eq);
 		
-		/*double[] ints = new double[sam];
-		for(int i = 0; i < ints.length; i++) ints[i] = randInBound();*/
-		
 		Map<String, Double> varSet = eval.getKeys();
 		Set<String> vars = varSet.keySet();
 		
-		if(vars.size()!=1) System.out.println("BAD NUMBER OF VARIABLES!");
+		if(vars.size()!=1){ System.out.println("BAD NUMBER OF VARIABLES!"); return;}
 		String key = vars.iterator().next();
 		
-		double sum = 0;
-		for(int i = 0; i < sam; i++){
-			varSet.put(key, randInBound());
-			sum+= eval.evaluate(varSet);
+		double[][] vals = new double[sam][2];
+		for(int i = 0; i < vals.length; i++){ 
+			vals[i][0] = randInBound();
+			varSet.put(key, vals[i][0]); 
+			vals[i][1] = eval.evaluate(varSet);
 		}
-		sum/=sam;
+		sortArray(vals);
+		
+		for(double[] val: vals){
+			System.out.println(val[0] + ", " + val[1]);
+		}
+		double sum = 0;
+		for(int i = 0; i < vals.length-1; i++){			//Trapezoid sum
+			double height = (vals[i][1]+vals[i+1][1])/2;
+			double width = vals[i+1][0]-vals[i][0];
+			sum+=height*width;
+		}
 		
 		DecimalFormat df = new DecimalFormat("####0.00000");
-		areaStr = df.format((ub-lb)*sum);
+		areaStr = df.format(sum);
 		
-		avgval.setText(sum+"");
-		area.setText((ub-lb)*sum+"");
+		avgval.setText((1/(ub-lb))*sum+"");
+		area.setText(sum+"");
 
 		latexRender();
 		
@@ -99,6 +107,55 @@ public class Integrator extends javax.swing.JFrame {
 		
 	}
 	
+	private void sortArray(double[][] vals) {
+		int size = vals.length;
+        if (size < 2)
+            return;
+        int mid = size / 2;
+        int leftSize = mid;
+        int rightSize = size - mid;
+        double[][] left = new double[leftSize][];
+        double[][] right = new double[rightSize][];
+        for (int i = 0; i < mid; i++) {
+            left[i] = vals[i];
+
+        }
+        for (int i = mid; i < size; i++) {
+            right[i - mid] = vals[i];
+        }
+        sortArray(left);
+        sortArray(right);
+        merge(left, right, vals);
+    }
+
+    public static void merge(double[][] left, double[][] right, double[][] vals) {
+        int leftSize = left.length;
+        int rightSize = right.length;
+        int i = 0, j = 0, k = 0;
+        while (i < leftSize && j < rightSize) {
+            if (left[i][0] <= right[j][0]) {
+                vals[k] = left[i];
+                i++;
+                k++;
+            } else {
+                vals[k] = right[j];
+                k++;
+                j++;
+            }
+        }
+        while (i < leftSize) {
+            vals[k] = left[i];
+            k++;
+            i++;
+        }
+        while (j < leftSize) {
+            vals[k] = right[j];
+            k++;
+            j++;
+        }
+    }
+
+
 	private double randInBound(){
 		return lb + ((ub-lb)*Math.random());
 	}
