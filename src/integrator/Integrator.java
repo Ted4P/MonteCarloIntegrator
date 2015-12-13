@@ -83,13 +83,11 @@ public class Integrator extends javax.swing.JFrame {
 			varSet.put(key, vals[i][0]); 
 			vals[i][1] = eval.evaluate(varSet);
 		}
-		sortArray(vals);
+		MergeSort sorter = new MergeSort();
+		sorter.sort(vals);
 		
-		for(double[] val: vals){
-			System.out.println(val[0] + ", " + val[1]);
-		}
 		double sum = 0;
-		for(int i = 0; i < vals.length-1; i++){			//Trapezoid sum
+		for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
 			double height = (vals[i][1]+vals[i+1][1])/2;
 			double width = vals[i+1][0]-vals[i][0];
 			sum+=height*width;
@@ -107,53 +105,58 @@ public class Integrator extends javax.swing.JFrame {
 		
 	}
 	
-	private void sortArray(double[][] vals) {
-		int size = vals.length;
-        if (size < 2)
-            return;
-        int mid = size / 2;
-        int leftSize = mid;
-        int rightSize = size - mid;
-        double[][] left = new double[leftSize][];
-        double[][] right = new double[rightSize][];
-        for (int i = 0; i < mid; i++) {
-            left[i] = vals[i];
-
-        }
-        for (int i = mid; i < size; i++) {
-            right[i - mid] = vals[i];
-        }
-        sortArray(left);
-        sortArray(right);
-        merge(left, right, vals);
-    }
-
-    public static void merge(double[][] left, double[][] right, double[][] vals) {
-        int leftSize = left.length;
-        int rightSize = right.length;
-        int i = 0, j = 0, k = 0;
-        while (i < leftSize && j < rightSize) {
-            if (left[i][0] <= right[j][0]) {
-                vals[k] = left[i];
-                i++;
-                k++;
-            } else {
-                vals[k] = right[j];
-                k++;
-                j++;
-            }
-        }
-        while (i < leftSize) {
-            vals[k] = left[i];
-            k++;
-            i++;
-        }
-        while (j < leftSize) {
-            vals[k] = right[j];
-            k++;
-            j++;
-        }
-    }
+	private class MergeSort {
+	     
+	    private double[][] array;
+	    private double[][] tempMergArr;
+	    private int length;
+	     
+	    public void sort(double inputArr[][]) {
+	        this.array = inputArr;
+	        this.length = inputArr.length;
+	        this.tempMergArr = new double[length][2];
+	        doMergeSort(0, length - 1);
+	    }
+	 
+	    private void doMergeSort(int lowerIndex, int higherIndex) {
+	         
+	        if (lowerIndex < higherIndex) {
+	            int middle = lowerIndex + (higherIndex - lowerIndex) / 2;
+	            // Below step sorts the left side of the array
+	            doMergeSort(lowerIndex, middle);
+	            // Below step sorts the right side of the array
+	            doMergeSort(middle + 1, higherIndex);
+	            // Now merge both sides
+	            mergeParts(lowerIndex, middle, higherIndex);
+	        }
+	    }
+	 
+	    private void mergeParts(int lowerIndex, int middle, int higherIndex) {
+	 
+	        for (int i = lowerIndex; i <= higherIndex; i++) {
+	            tempMergArr[i] = array[i];
+	        }
+	        int i = lowerIndex;
+	        int j = middle + 1;
+	        int k = lowerIndex;
+	        while (i <= middle && j <= higherIndex) {
+	            if (tempMergArr[i][0] <= tempMergArr[j][0]) {
+	                array[k] = tempMergArr[i];
+	                i++;
+	            } else {
+	                array[k] = tempMergArr[j];
+	                j++;
+	            }
+	            k++;
+	        }
+	        while (i <= middle) {
+	            array[k] = tempMergArr[i];
+	            k++;
+	            i++;
+	        }
+	 
+	    }
+	}
 
 
 	private double randInBound(){

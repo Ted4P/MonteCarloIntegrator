@@ -8,7 +8,7 @@ public class Node {
 	
 	public Node(ArrayList<Func> function){
 	while(stripLeadTail(function));
-	if(function.size()==1 && function.get(0).isANumber()){
+	if(function.size()==1){
 		mainFunc = (Operand) function.get(0);
 	}
 	else{

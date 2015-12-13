@@ -1,6 +1,7 @@
 package evaluator;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import functions.Add;
@@ -43,9 +44,10 @@ public class Lexer {
 	private static void handleImplcitMult(ArrayList<Func> lexed){
 		int i = 0;
 		while(i < lexed.size() -1){
-			if(lexed.get(i).isANumber()){
+			Func func = lexed.get(i);
+			if(func instanceof Number || func instanceof Var){
 				Func next = lexed.get(i+1);
-				if(next.isANumber()) lexed.add(i+1, new Mul());
+				if(next instanceof Number || next instanceof Var) lexed.add(i+1, new Mul());
 				else if(next instanceof OpenParen) lexed.add(i+1, new Mul());
 			}
 			if(lexed.get(i) instanceof Paren && lexed.get(i+1) instanceof Paren){
@@ -67,26 +69,29 @@ public class Lexer {
 	}
 
 	private static Func getFunc(String function, ArrayList<Func> lexed) {		
-		if(pointer < function.length() && function.charAt(pointer)=='-' && (lexed.size()==0 || !(lexed.get(lexed.size()-1)).isANumber())){ 
+		if(pointer < function.length() && function.charAt(pointer)=='-' && (lexed.size()==0 || !(lexed.get(lexed.size()-1) instanceof Number || lexed.get(lexed.size()-1) instanceof Var))){ 
 			pointer++; return new UnaryMinus();
 		}
+		Map<String, Func> funcs = new TreeMap<String, Func>();
 		
-		ArrayList<Operand> functions = new ArrayList<Operand>();
-		functions.add(new Add());
-		functions.add(new Mul());
-		functions.add(new Sub());
-		functions.add(new Div());
-		functions.add(new Exp());
-		functions.add(new Sqrt());
-		functions.add(new Sine());
-		functions.add(new Cosine());
-		functions.add(new Tangent());
+		Func add = new Add();
+		Func sub = new Sub();
+		Func mul = new Mul();
+		Func div = new Div();
+		Func exp = new Exp();
+		Func sqrt = new Sqrt();
+		Func sin = new Sine();
+		Func cos = new Cosine();
+		Func tan = new Tangent();
 		
-		for(Operand op: functions){
-			String name = op.toString();
+		funcs.put("+", add);funcs.put("-", sub);funcs.put("*", mul);funcs.put("/", div);funcs.put("^", exp);funcs.put("sqrt", sqrt);
+		funcs.put("sin", sin);funcs.put("Sin", sin);funcs.put("cos", cos);funcs.put("Cos", cos);funcs.put("tan", tan);funcs.put("Tan", tan);
+		
+		Set<String> funcNames = funcs.keySet();
+		for(String name: funcNames){
 			if(pointer + name.length() < function.length() && function.substring(pointer, pointer+ name.length()).equals(name)){
 				pointer += name.length();
-				return op;
+				return funcs.get(name);
 			}
 		}
 		return null;
