@@ -197,41 +197,57 @@ public class Integrator extends JFrame
 		double[][] vals = new double[sam][2];
 		for(int i = 0; i < vals.length; i++){ 
 			vals[i][0] = randInBound();
-			varSet.get(key).setVal(vals[i][0]); 
-			vals[i][1] = eval.evaluate(varSet);
 		}
 		
 		MergeSort sorter = new MergeSort();
 		sorter.sort(vals);
-		
+	
 		double sum = 0;
-		if(trap.isSelected())
+		if(mid.isSelected())
 		{
-			for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
-				double height = (vals[i][1]+vals[i+1][1])/2;
+			//Creates a new array new values in the middle of the previously selected ones.
+			double[][] midVals = new double[sam - 1][2];
+			for(int i = 0; i < midVals.length; i++)    //Midpoint sum
+			{ 
 				double width = vals[i+1][0]-vals[i][0];
+				midVals[i][0] = width / 2 + vals[i][0];
+				varSet.get(key).setVal(midVals[i][0]); 
+				midVals[i][1] = eval.evaluate(varSet);
+				double height = midVals[i][1];
 				sum+=height*width;
 			}
 		}
-		else if(mid.isSelected())
+		else
 		{
-			
-		}
-		else if(left.isSelected())
-		{
-			for(int i = 0; i < vals.length-1; i++){		//Left sum
-				double height = vals[i][1];
-				double width = vals[i+1][0]-vals[i][0];
-				sum+=height*width;
+			for(int i = 0; i < vals.length; i++)
+			{
+				varSet.get(key).setVal(vals[i][0]);  
+				vals[i][1] = eval.evaluate(varSet);
 			}
-		}
-		else if(right.isSelected())
-		{
-			for(int i = 1; i < vals.length; i++){		//Right sum
-				double height = vals[i][1];
-				double width = vals[i][0]-vals[i-1][0];
-				sum+=height*width;
+			if(trap.isSelected())
+			{
+				for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
+					double height = (vals[i][1]+vals[i+1][1])/2;
+					double width = vals[i+1][0]-vals[i][0];
+					sum+=height*width;
+				}
 			}
+			else if(left.isSelected())
+			{
+				for(int i = 0; i < vals.length-1; i++){		//Left sum
+					double height = vals[i][1];
+					double width = vals[i+1][0]-vals[i][0];
+					sum+=height*width;
+				}
+			}
+			else if(right.isSelected())
+			{
+				for(int i = 1; i < vals.length; i++){		//Right sum
+					double height = vals[i][1];
+					double width = vals[i][0]-vals[i-1][0];
+					sum+=height*width;
+				}
+			}	
 		}
 		
 		DecimalFormat df = new DecimalFormat("####0.00000");
