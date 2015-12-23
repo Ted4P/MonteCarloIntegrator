@@ -45,12 +45,11 @@ public class Lexer {
 		int i = 0;
 		while(i < lexed.size() -1){
 			Func func = lexed.get(i), next = lexed.get(i+1);
-			if(func instanceof Number || func instanceof Var){
-				if(next instanceof Number || next instanceof Var) lexed.add(i+1, new Mul());
-				else if(next instanceof OpenParen) lexed.add(i+1, new Mul());
-			}
-			if(func instanceof CloseParen && next instanceof OpenParen) lexed.add(i+1, new Mul());	//If )(, add a *
-			if(func instanceof CloseParen && next instanceof Operand && ((Operand) next).getNumVals()==1 ) lexed.add(i+1, new Mul());
+			if((func instanceof Number || func instanceof Var) &&
+				(next instanceof Number || next instanceof Var || next instanceof OpenParen || (next instanceof Operand && ((Operand) next).getNumVals()==1))) lexed.add(i+1, new Mul());
+			else
+			if(func instanceof CloseParen && 
+				(next instanceof OpenParen || (next instanceof Operand && ((Operand) next).getNumVals()==1))) lexed.add(i+1, new Mul());	//If )(, add a *
 			i++;
 		}
 		Func last = lexed.get(lexed.size()-1);
@@ -90,7 +89,6 @@ public class Lexer {
 			if(pointer + name.length() < function.length() && function.substring(pointer, pointer+ name.length()).equals(name)){
 				pointer += name.length();
 				Func func = funcs.get(name);
-				if(((Operand) func).getNumVals()==1 && lexed.size()!=0 && (lexed.get(lexed.size()-1) instanceof Number || lexed.get(lexed.size()-1) instanceof Var))  lexed.add(new Mul());
 				return func;
 			}
 		}
