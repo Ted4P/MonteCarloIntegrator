@@ -20,7 +20,7 @@ public class Lexer {
 	public static int pointer;
 	public static ArrayList<Func> lex(String function) {
 		//if(checkErrors(function)) throw new Exception(); TODO: Syntactic error checking
-		function = removeSpaces(function);
+		function = function.replaceAll("\\s", "");
 		ArrayList<Func> lexed = new ArrayList<Func>();
 		pointer = 0;
 		while(pointer < function.length()){
@@ -54,15 +54,6 @@ public class Lexer {
 		}
 		Func last = lexed.get(lexed.size()-1);
 		if(lexed.size() > 1 && (last instanceof Number || last instanceof Var)  && lexed.get(lexed.size()-2) instanceof Paren) lexed.add(lexed.size()-1, new Mul());	//Check if final characters look like this: )4 or )Y
-	}
-	
-	private static String removeSpaces(String function) {	
-		int i = 0;
-		while(i<function.length()){
-			if(function.charAt(i)==' ') function = function.substring(0, i) + function.substring(i+1);
-			else i++;
-		}
-		return function;
 	}
 
 	private static Func getFunc(String function, ArrayList<Func> lexed) {		

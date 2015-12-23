@@ -11,12 +11,10 @@ public class MultiVar {
 	public static void main(String[] args) throws Exception{
 		Scanner scan = new Scanner(System.in);
 		System.out.print("INTEGRAND: ");
-		String equation = scan.next();
+		String equation = scan.nextLine();
 		
 		Evaluator eval = new Evaluator();
 		eval.parse(equation);
-		System.out.println("PRE SIMPLIFIED EQUATION: " + eval.toString());
-		eval.simplify();
 		System.out.println("SIMPLIFIED EQUATION: " + eval.toString());
 		
 		Map<String, MutableDouble> vars = eval.getKeys();

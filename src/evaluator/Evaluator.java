@@ -12,6 +12,7 @@ public class Evaluator {
 	}
 	public void parse(String function){
 		 mainNode = new Node(Lexer.lex(function));
+		 mainNode.simplify();
 	}
 	
 	public double evaluate(Map<String, MutableDouble> varSet) throws Exception{
@@ -19,10 +20,6 @@ public class Evaluator {
 	}
 	public double evaluate() throws Exception{
 		return mainNode.eval();
-	}
-	
-	public void simplify(){			//Attempt to evaluate everything possible without variable values
-		mainNode.simplify();
 	}
 	
 	public String toString(){
