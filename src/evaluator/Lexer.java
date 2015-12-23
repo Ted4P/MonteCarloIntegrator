@@ -44,15 +44,13 @@ public class Lexer {
 	private static void handleImplcitMult(ArrayList<Func> lexed){
 		int i = 0;
 		while(i < lexed.size() -1){
-			Func func = lexed.get(i);
+			Func func = lexed.get(i), next = lexed.get(i+1);
 			if(func instanceof Number || func instanceof Var){
-				Func next = lexed.get(i+1);
 				if(next instanceof Number || next instanceof Var) lexed.add(i+1, new Mul());
 				else if(next instanceof OpenParen) lexed.add(i+1, new Mul());
 			}
-			if(lexed.get(i) instanceof Paren && lexed.get(i+1) instanceof Paren){
-				if(lexed.get(i) instanceof CloseParen && lexed.get(i+1) instanceof OpenParen) lexed.add(i+1, new Mul());	//If )(, add a *
-			}
+			if(func instanceof CloseParen && next instanceof OpenParen) lexed.add(i+1, new Mul());	//If )(, add a *
+			if(func instanceof CloseParen && next instanceof Operand && ((Operand) next).getNumVals()==1 ) lexed.add(i+1, new Mul());
 			i++;
 		}
 		Func last = lexed.get(lexed.size()-1);

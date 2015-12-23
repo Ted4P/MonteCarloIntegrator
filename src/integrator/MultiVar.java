@@ -15,6 +15,9 @@ public class MultiVar {
 		
 		Evaluator eval = new Evaluator();
 		eval.parse(equation);
+		System.out.println("PRE SIMPLIFIED EQUATION: " + eval.toString());
+		eval.simplify();
+		System.out.println("SIMPLIFIED EQUATION: " + eval.toString());
 		
 		Map<String, MutableDouble> vars = eval.getKeys();
 		Set<String> varNames = vars.keySet();

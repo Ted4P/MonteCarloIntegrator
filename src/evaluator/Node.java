@@ -97,4 +97,27 @@ public class Node {
 		}
 		return;
 	}
+
+	public void simplify() {			//Attempt to solve as much of the equation tree as possible without variables
+		if(mainFunc instanceof Var || mainFunc instanceof Number) return;
+		
+		for(Node child: children) child.simplify();
+		ArrayList<Double> vals = new ArrayList<Double>();
+		for(Node child: children){
+			try{
+				vals.add(child.eval());
+			}
+			catch (Exception ex){
+				return;
+			}
+		}
+		mainFunc = new Number(mainFunc.eval(vals));			//Replace the function with a constant, and remove children
+		children.clear();
+	}
+	
+	public String toString(){
+		if(children==null || children.size()==0) return mainFunc.toString();
+		if(children.size()==1) return mainFunc.toString() + "(" + children.get(0) +")";
+		return "(" + children.get(0) +")"+ mainFunc.toString() + "(" + children.get(1) +")";
+	}
 }
