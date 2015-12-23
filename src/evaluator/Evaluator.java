@@ -5,8 +5,8 @@ import java.util.TreeMap;
 
 public class Evaluator {
 	Node mainNode;
-	public Map<String, Double> getKeys(){
-		Map<String, Double> map = new TreeMap<String, Double>();
+	public Map<String, MutableDouble> getKeys(){
+		Map<String, MutableDouble> map = new TreeMap<String, MutableDouble>();
 		mainNode.addKeys(map);
 		return map;
 	}
@@ -14,8 +14,8 @@ public class Evaluator {
 		 mainNode = new Node(Lexer.lex(function));
 	}
 	
-	public double evaluate(Map<String, Double> keys) throws Exception{
-		return mainNode.eval(keys);
+	public double evaluate(Map<String, MutableDouble> varSet) throws Exception{
+		return mainNode.eval(varSet);
 	}
 	public double evaluate() throws Exception{
 		return mainNode.eval();

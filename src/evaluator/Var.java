@@ -27,8 +27,8 @@ public class Var extends Operand{
 		return vals.get(0);
 	}
 	
-	public double eval(Map<String, Double> vals){
-		return vals.get(key).doubleValue();
+	public double eval(Map<String, MutableDouble> vals){
+		return vals.get(key).getVal();
 	}
 
 	public int getOrderOps() {

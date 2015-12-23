@@ -17,6 +17,7 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 
 import evaluator.Evaluator;
+import evaluator.MutableDouble;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -183,7 +184,7 @@ public class Integrator extends JFrame
 		
 		eval.parse(eq);
 		
-		Map<String, Double> varSet = eval.getKeys();
+		Map<String, MutableDouble> varSet = eval.getKeys();
 		Set<String> vars = varSet.keySet();
 		
 		if(vars.size()!=1)
@@ -196,7 +197,7 @@ public class Integrator extends JFrame
 		double[][] vals = new double[sam][2];
 		for(int i = 0; i < vals.length; i++){ 
 			vals[i][0] = randInBound();
-			varSet.put(key, vals[i][0]); 
+			varSet.get(key).setVal(vals[i][0]); 
 			vals[i][1] = eval.evaluate(varSet);
 		}
 		

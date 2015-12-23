@@ -71,24 +71,24 @@ public class Node {
 		return eval(null);
 	}
 	
-	public double eval(Map<String, Double> keys) throws Exception{
+	public double eval(Map<String, MutableDouble> varSet) throws Exception{
 		if(mainFunc instanceof Var){
-			return ((Var)mainFunc).eval(keys);
+			return ((Var)mainFunc).eval(varSet);
 		}
 		if(mainFunc instanceof Number) return mainFunc.eval(null);
 		
 		ArrayList<Double> subEval = new ArrayList<Double>();
 		for(Node child: children){
-			subEval.add(child.eval(keys));
+			subEval.add(child.eval(varSet));
 		}
 		return mainFunc.eval(subEval);
 	}
 
 
-	public void addKeys(Map<String, Double> map) {
+	public void addKeys(Map<String, MutableDouble> map) {
 		if(children == null || children.size() == 0){
 			if(mainFunc instanceof Var){
-				map.put(((Var)mainFunc).getKey(), null);
+				map.put(((Var)mainFunc).getKey(), new MutableDouble());
 			}
 			return;
 		}
