@@ -49,28 +49,24 @@ public class Integrator extends JFrame
 		eval = new Evaluator();
 		entireGUI = new JPanel();
 		
-		JLabel label1 = new JLabel("       Integrand");
 		integrand = new JTextField(10);
 		JPanel panel1 = new JPanel();
-		panel1.add(label1);
+		panel1.add(new JLabel("      Integrand"));
 		panel1.add(integrand);
 
-		JLabel label2 = new JLabel("Lower Bound");
 		lbound = new JTextField(10);
 		JPanel panel2 = new JPanel();
-		panel2.add(label2);
+		panel2.add(new JLabel("Lower Bound"));
 		panel2.add(lbound);
 		
-		JLabel label3 = new JLabel("Upper Bound");
 		ubound = new JTextField(10);
 		JPanel panel3 = new JPanel();
-		panel3.add(label3);
+		panel3.add(new JLabel("Upper Bound"));
 		panel3.add(ubound);
 		
-		JLabel label4 = new JLabel("# of Samples");
 		samples = new JTextField("500000", 10);
 		JPanel panel4 = new JPanel();
-		panel4.add(label4);
+		panel4.add(new JLabel("# of Samples"));
 		panel4.add(samples);
 		
 		valsBox = Box.createVerticalBox();
@@ -222,7 +218,7 @@ public class Integrator extends JFrame
 		}
 		else if(left.isSelected())
 		{
-			for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
+			for(int i = 0; i < vals.length-1; i++){		//Left sum
 				double height = vals[i][1];
 				double width = vals[i+1][0]-vals[i][0];
 				sum+=height*width;
@@ -230,7 +226,7 @@ public class Integrator extends JFrame
 		}
 		else if(right.isSelected())
 		{
-			for(int i = 1; i < vals.length; i++){		//Trapezoid sum
+			for(int i = 1; i < vals.length; i++){		//Right sum
 				double height = vals[i][1];
 				double width = vals[i][0]-vals[i-1][0];
 				sum+=height*width;
