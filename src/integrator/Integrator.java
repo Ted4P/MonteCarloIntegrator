@@ -6,79 +6,197 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
+
 import evaluator.Evaluator;
 
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-
-
-public class Integrator extends javax.swing.JFrame {
-	
+public class Integrator extends JFrame 
+{
 	private Evaluator eval;
 	
-	//encloses everything
-	private JPanel entireGUI;
+	private JPanel entireGUI, enterPanel, optionsPanel, integralPanel;
+	private Box buttonBox, valsBox, verticalBox, resultBox;
+	private JTextField integrand, lbound, ubound, samples;
+	private JRadioButton right, left, mid, trap;
 	
-	JTextField equation = new JTextField(10);
-	JTextField lbound = new JTextField(10);
-	JTextField ubound = new JTextField(10);
-	JTextField samples = new JTextField(10);
+	private JButton integrate, restart, help;
 	
 	//results
-	private JLabel avgval;
-	private JLabel area;
-	private JLabel integral;
+	private JLabel avgval, area, integral;
 	private String areaStr;
 	
 	//variables to store text field data
 	private String eq; //equation
-	private double lb; //lower bound
-	private double ub; //upper bound
-	private int sam; //samples
+	private double lb, ub; //lower and upper bounds
+	private int sam; //samples	
 	
-	GridBagConstraints c;
-	
-	
-	
-	
-	public Integrator() {
-		entireGUI = new JPanel();
-		entireGUI.setLayout(new GridBagLayout());
-		c = new GridBagConstraints();
+	public Integrator() 
+	{
+		super("Monte Carlo Integrator");
 		
 		eval = new Evaluator();
+		entireGUI = new JPanel();
 		
-		samples.setText("500000");
-		initText();
+		JLabel label1 = new JLabel("       Integrand");
+		integrand = new JTextField(10);
+		JPanel panel1 = new JPanel();
+		panel1.add(label1);
+		panel1.add(integrand);
+
+		JLabel label2 = new JLabel("Lower Bound");
+		lbound = new JTextField(10);
+		JPanel panel2 = new JPanel();
+		panel2.add(label2);
+		panel2.add(lbound);
 		
+		JLabel label3 = new JLabel("Upper Bound");
+		ubound = new JTextField(10);
+		JPanel panel3 = new JPanel();
+		panel3.add(label3);
+		panel3.add(ubound);
+		
+		JLabel label4 = new JLabel("# of Samples");
+		samples = new JTextField("500000", 10);
+		JPanel panel4 = new JPanel();
+		panel4.add(label4);
+		panel4.add(samples);
+		
+		valsBox = Box.createVerticalBox();
+		valsBox.add(panel1);
+		valsBox.add(panel2);
+		valsBox.add(panel3);
+		valsBox.add(panel4);
+		
+		right = new JRadioButton("Right");
+		left = new JRadioButton("Left");
+		mid = new JRadioButton("Midpoint");
+		trap = new JRadioButton("Trapezoid", true);
+		ButtonGroup group = new ButtonGroup();
+		group.add(left);
+		group.add(right);
+		group.add(mid);
+		group.add(trap);
+		buttonBox = Box.createVerticalBox();
+		buttonBox.add(left);
+		buttonBox.add(right);
+		buttonBox.add(mid);
+		buttonBox.add(trap);
+		
+		enterPanel = new JPanel();
+		enterPanel.add(valsBox);
+		enterPanel.add(buttonBox);
+		
+		help = new JButton("?");
+		help.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent arg0)
+					{
+						JOptionPane.showMessageDialog(entireGUI, "Help message goes here.", "Help", JOptionPane.QUESTION_MESSAGE);
+					}
+				});
+		integrate = new JButton("Integrate");
+		integrate.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent arg0)
+					{
+						try 
+						{
+							calculate();
+						} 
+						catch (Exception e1)
+						{
+							JOptionPane.showMessageDialog(entireGUI, "Parse failed.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				});
+		restart = new JButton("Clear");
+		restart.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent arg0)
+					{
+						integrand.setText("");
+						lbound.setText("");
+						ubound.setText("");
+						samples.setText("500000");
+						integral.setIcon(null);
+						avgval.setText(" ");
+						area.setText(" ");
+						entireGUI.setVisible(true);
+					}
+				});
+		
+		optionsPanel = new JPanel();
+		optionsPanel.add(help);
+		optionsPanel.add(integrate);
+		optionsPanel.add(restart);
+		
+		//Initializes the variables so the window will be a set size.
+		eq = "";
+		lb = 0;
+		ub = 0;
+		areaStr = "";
+		
+		integral = new JLabel();
+		latexRender();
+		integralPanel = new JPanel();
+		integralPanel.add(integral);
+		
+		avgval = new JLabel(" ");
+		area = new JLabel(" ");
+		resultBox = Box.createVerticalBox();
+		resultBox.setAlignmentX(RIGHT_ALIGNMENT);
+		resultBox.add(new JLabel("Average Value:"));
+		resultBox.add(avgval);
+		resultBox.add(new JLabel("Area Under Graph:"));
+		resultBox.add(area);
+		
+		verticalBox = Box.createVerticalBox();
+		verticalBox.add(enterPanel);
+		verticalBox.add(optionsPanel);
+		verticalBox.add(resultBox);
+		verticalBox.add(integralPanel);
+		
+		entireGUI.add(verticalBox);
 		add(entireGUI);
 		pack();
+		integral.setVisible(false);
+		entireGUI.setVisible(true);
 		this.setContentPane(entireGUI);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		
 	}
 	
-	
-	private void calculate () throws Exception{
-		eq = equation.getText();
+	private void calculate() throws Exception
+	{
+		eq = integrand.getText();
 		lb = Double.parseDouble(lbound.getText());
 		ub = Double.parseDouble(ubound.getText());
 		sam = Integer.parseInt(samples.getText());
 		
-		System.out.println("Parsing...");
 		eval.parse(eq);
 		
 		Map<String, Double> varSet = eval.getKeys();
 		Set<String> vars = varSet.keySet();
 		
-		if(vars.size()!=1){ System.out.println("BAD NUMBER OF VARIABLES!"); return;}
+		if(vars.size()!=1)
+		{
+			JOptionPane.showMessageDialog(entireGUI, "Wrong number of variables", "Error", JOptionPane.ERROR_MESSAGE); 
+			return;
+		}
 		String key = vars.iterator().next();
 		
-		System.out.println("Evaluating function...");
 		double[][] vals = new double[sam][2];
 		for(int i = 0; i < vals.length; i++){ 
 			vals[i][0] = randInBound();
@@ -86,16 +204,37 @@ public class Integrator extends javax.swing.JFrame {
 			vals[i][1] = eval.evaluate(varSet);
 		}
 		
-		System.out.println("Sorting output...");
 		MergeSort sorter = new MergeSort();
 		sorter.sort(vals);
 		
-		System.out.println("Calculating trapezoid sum...");
 		double sum = 0;
-		for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
-			double height = (vals[i][1]+vals[i+1][1])/2;
-			double width = vals[i+1][0]-vals[i][0];
-			sum+=height*width;
+		if(trap.isSelected())
+		{
+			for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
+				double height = (vals[i][1]+vals[i+1][1])/2;
+				double width = vals[i+1][0]-vals[i][0];
+				sum+=height*width;
+			}
+		}
+		else if(mid.isSelected())
+		{
+			
+		}
+		else if(left.isSelected())
+		{
+			for(int i = 0; i < vals.length-1; i++){		//Trapezoid sum
+				double height = vals[i][1];
+				double width = vals[i+1][0]-vals[i][0];
+				sum+=height*width;
+			}
+		}
+		else if(right.isSelected())
+		{
+			for(int i = 1; i < vals.length; i++){		//Trapezoid sum
+				double height = vals[i][1];
+				double width = vals[i][0]-vals[i-1][0];
+				sum+=height*width;
+			}
 		}
 		
 		DecimalFormat df = new DecimalFormat("####0.00000");
@@ -105,9 +244,6 @@ public class Integrator extends javax.swing.JFrame {
 		area.setText(sum+"");
 
 		latexRender();
-		
-		pack();
-		
 	}
 	
 	private class MergeSort {
@@ -182,159 +318,11 @@ public class Integrator extends javax.swing.JFrame {
 		
 		
 		integral.setIcon(icon);
-		
-	}
-	
-	
-	private void initText(){
-		//top title
-		final JLabel TITLE = new JLabel("Monte Carlo Integrator", SwingConstants.CENTER);
-		c.ipady=15;
-		c.gridx=0;
-		c.gridy=0;
-		c.gridwidth=3;
-		c.weightx=1.0;
-		c.weighty=0.1;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(TITLE,c);
-		
-		//latex equation
-		integral = new JLabel("",SwingConstants.CENTER);
-		c.ipady=0;
-		c.gridwidth=2;
-		c.gridx=0;
-		c.gridy=1;
-		c.weightx=0.6;
-		c.weighty=0.3;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(integral,c);
-		
-		//input data labels
-		final JLabel EQUATION = new JLabel("Equation: ",SwingConstants.RIGHT);
-		c.ipadx=15;
-		c.gridwidth=1;
-		c.gridx=0;
-		c.gridy=2;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(EQUATION,c);
-		
-		final JLabel LBOUND = new JLabel("Lower Bound: ",SwingConstants.RIGHT);
-		c.gridx=0;
-		c.gridy=3;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(LBOUND,c);
-		
-		final JLabel UBOUND = new JLabel("Upper Bound: ",SwingConstants.RIGHT);
-		c.gridx=0;
-		c.gridy=4;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(UBOUND,c);
-		
-		final JLabel SAMPLES = new JLabel("# of Samples: ",SwingConstants.RIGHT);
-		c.ipady=40;
-		c.gridx=0;
-		c.gridy=5;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(SAMPLES,c);	
-		
-		//input text fields
-		c.ipadx=0;
-		c.ipady=0;
-		c.gridx=1;
-		c.gridy=2;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(equation,c);
-		
-		c.gridx=1;
-		c.gridy=3;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(lbound,c);
-		
-		c.gridx=1;
-		c.gridy=4;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(ubound,c);
-		
-		c.gridx=1;
-		c.gridy=5;
-		c.weightx=0.3;
-		c.weighty=0.2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(samples,c);
-		
-		//calculation side
-		final JButton perform = new JButton("INTEGRATE!");
-		perform.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e)
-			{
-				try {
-					calculate();
-				} catch (Exception e1) {
-					System.out.println("Parse failed!");
-				}
-			}
-		});
-		c.ipadx=50;
-		c.gridx=2;
-		c.gridy=1;
-		c.weightx=0.4;
-		c.weighty=0.3;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(perform,c);
-		
-		final JLabel AVGVAL = new JLabel("Average Value",SwingConstants.CENTER);
-		c.gridx=2;
-		c.gridy=2;
-		c.weightx=0.4;
-		c.weighty=0.3;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(AVGVAL,c);
-		
-		avgval = new JLabel("",SwingConstants.CENTER);
-		c.gridx=2;
-		c.gridy=3;
-		c.weightx=0.4;
-		c.weighty=0.3;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(avgval,c);
-		
-		
-		final JLabel AREA = new JLabel("Area Under Curve",SwingConstants.CENTER);
-		c.gridx=2;
-		c.gridy=4;
-		c.weightx=0.4;
-		c.weighty=0.3;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(AREA,c);
-		
-		area = new JLabel("",SwingConstants.CENTER);
-		c.gridx=2;
-		c.gridy=5;
-		c.weightx=0.4;
-		c.weighty=0.3;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		entireGUI.add(area,c);
+		integral.setVisible(true);
+		entireGUI.setVisible(true);
 	}
 
 	public static void main(String[] args){
 		new Integrator();
 	}
 }
-
-
-
-
