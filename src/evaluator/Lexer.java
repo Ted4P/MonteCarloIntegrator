@@ -49,11 +49,9 @@ public class Lexer {
 				(next instanceof Number || next instanceof Var || next instanceof OpenParen || (next instanceof Operand && ((Operand) next).getNumVals()==1))) lexed.add(i+1, new Mul());
 			else
 			if(func instanceof CloseParen && 
-				(next instanceof OpenParen || (next instanceof Operand && ((Operand) next).getNumVals()==1))) lexed.add(i+1, new Mul());	//If )(, add a *
+				(next instanceof OpenParen || next instanceof Number || next instanceof Var|| (next instanceof Operand && ((Operand) next).getNumVals()==1))) lexed.add(i+1, new Mul());	//If )(, add a *
 			i++;
 		}
-		Func last = lexed.get(lexed.size()-1);
-		if(lexed.size() > 1 && (last instanceof Number || last instanceof Var)  && lexed.get(lexed.size()-2) instanceof Paren) lexed.add(lexed.size()-1, new Mul());	//Check if final characters look like this: )4 or )Y
 	}
 
 	private static Func getFunc(String function, ArrayList<Func> lexed) {		
