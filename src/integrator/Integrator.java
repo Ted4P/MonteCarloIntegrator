@@ -1,11 +1,15 @@
 package integrator;
 
-import org.scilab.forge.jlatexmath.*;
-
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,21 +17,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.scilab.forge.jlatexmath.TeXConstants;
+import org.scilab.forge.jlatexmath.TeXFormula;
+import org.scilab.forge.jlatexmath.TeXIcon;
 
 import evaluator.Evaluator;
 import evaluator.MutableDouble;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 public class Integrator extends JFrame 
 {
 	private Evaluator eval;
 	
-	private JPanel entireGUI, enterPanel, optionsPanel, integralPanel;
+	private JPanel entireGUI, enterPanel, optionsPanel, integralPanel, graphPanel;
 	private Box buttonBox, valsBox, verticalBox, resultBox;
 	private JTextField integrand, lbound, ubound, samples;
 	private JRadioButton right, left, mid, trap;
@@ -111,6 +121,7 @@ public class Integrator extends JFrame
 						try 
 						{
 							calculate();
+							
 						} 
 						catch (Exception e1)
 						{
@@ -130,7 +141,9 @@ public class Integrator extends JFrame
 						integral.setIcon(null);
 						avgval.setText(" ");
 						area.setText(" ");
+						graphPanel.removeAll();
 						entireGUI.setVisible(true);
+						pack();
 					}
 				});
 		
@@ -150,6 +163,7 @@ public class Integrator extends JFrame
 		integralPanel = new JPanel();
 		integralPanel.add(integral);
 		
+		
 		avgval = new JLabel(" ");
 		area = new JLabel(" ");
 		resultBox = Box.createVerticalBox();
@@ -159,13 +173,23 @@ public class Integrator extends JFrame
 		resultBox.add(new JLabel("Area Under Graph:"));
 		resultBox.add(area);
 		
+		graphPanel = new JPanel();
+		
+		
 		verticalBox = Box.createVerticalBox();
 		verticalBox.add(enterPanel);
 		verticalBox.add(optionsPanel);
 		verticalBox.add(resultBox);
 		verticalBox.add(integralPanel);
 		
+		
+		//horizBox = Box.createHorizontalBox();
+		//horizBox.add(verticalBox);
+		//horizBox.add(graphPanel);
+		
 		entireGUI.add(verticalBox);
+		entireGUI.add(graphPanel);
+		
 		add(entireGUI);
 		pack();
 		integral.setVisible(false);
@@ -256,8 +280,33 @@ public class Integrator extends JFrame
 		avgval.setText((1/(ub-lb))*sum+"");
 		area.setText(sum+"");
 
+		//graphing stuff
+		graphPanel.removeAll();//reset
+		XYSeries xyseries = new XYSeries("");
+		for (int i = 0; i<vals.length; i = i+100) { //plots every 100th point, just for time vs. result efficiency
+			xyseries.add(vals[i][0], vals[i][1]);
+		}
+		XYSeriesCollection xy = new XYSeriesCollection();
+		xy.addSeries(xyseries);
+		XYDataset xydataset = xy;
+		JFreeChart jfreechart = ChartFactory.createXYLineChart("Graph", "X", "Y", xydataset, PlotOrientation.VERTICAL, false, false, false);
+		XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+		xyplot.getDomainAxis().setLowerMargin(0.0D);
+		xyplot.getDomainAxis().setUpperMargin(0.0D);
+		JPanel chartpanel = new ChartPanel(jfreechart);
+		graphPanel.add(chartpanel);
+		graphPanel.setVisible(true);
+		entireGUI.add(graphPanel);
+		pack();
+		
 		latexRender();
+	
 	}
+	
+	
+	
+	
+	
 	
 	private class MergeSort {
 	     
