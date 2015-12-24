@@ -220,7 +220,6 @@ public class Integrator extends JFrame
 		console.setText("");
 		
 		addMessage("Parsing...");
-		console.update(console.getGraphics());
 		eval.parse(eq);
 		
 		Map<String, MutableDouble> varSet = eval.getKeys();
@@ -234,20 +233,17 @@ public class Integrator extends JFrame
 		String key = vars.iterator().next();
 		
 		addMessage("Generating random X values...");
-		console.update(console.getGraphics());
 		double[][] vals = new double[sam][2];
 		for(int i = 0; i < vals.length; i++){ 
 			vals[i][0] = randInBound();
 		}
 		
 		addMessage("Sorting...");
-		console.update(console.getGraphics());
 		MergeSorter sorter = new MergeSorter();
 		sorter.sort(vals);
 	
 		double sum = 0;
 		addMessage("Calculating...");
-		console.update(console.getGraphics());
 		if(mid.isSelected())
 		{
 			//Creates a new array new values in the middle of the previously selected ones.
@@ -302,7 +298,7 @@ public class Integrator extends JFrame
 		area.setText(sum+"");
 
 		addMessage("Graphing...");
-		console.update(console.getGraphics());
+		
 		JPanel chartpanel = graphEquation(vars, vals);
 		
 		graphPanel.add(chartpanel);
@@ -334,6 +330,7 @@ public class Integrator extends JFrame
 	
 	private void addMessage(String msg){
 		console.setText(console.getText() + "\n" + msg);
+		console.update(console.getGraphics());
 	}
 
 	private double randInBound(){
