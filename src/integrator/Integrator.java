@@ -1,6 +1,7 @@
 package integrator;
 
-import java.awt.Dimension;
+//Logic
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -8,6 +9,7 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Set;
 
+//Swing
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -16,16 +18,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+//Graphing
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+//LateX
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
@@ -38,9 +42,10 @@ public class Integrator extends JFrame
 	private Evaluator eval;
 	
 	private JPanel entireGUI, enterPanel, optionsPanel, integralPanel, graphPanel;
-	private Box buttonBox, valsBox, verticalBox, resultBox;
+	private Box buttonBox, valsBox, verticalBox, resultBox, consoleBox;
 	private JTextField integrand, lbound, ubound, samples;
 	private JRadioButton right, left, mid, trap;
+	private JTextArea console;
 	
 	private JButton integrate, restart, help;
 	
@@ -60,6 +65,28 @@ public class Integrator extends JFrame
 		eval = new Evaluator();
 		entireGUI = new JPanel();
 		
+		buildMainGUI();
+		
+		consoleBox = Box.createVerticalBox();
+		console = new JTextArea("", 14, 20);
+		console.setEditable(false);
+		consoleBox.add(new JLabel("Console:"));
+		consoleBox.add(console);
+		
+		entireGUI.add(verticalBox);
+		entireGUI.add(graphPanel);
+		entireGUI.add(consoleBox);
+		
+		add(entireGUI);
+		pack();
+		integral.setVisible(false);
+		entireGUI.setVisible(true);
+		this.setContentPane(entireGUI);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+	}
+
+	private void buildMainGUI() {
 		integrand = new JTextField(10);
 		JPanel panel1 = new JPanel();
 		panel1.add(new JLabel("      Integrand"));
@@ -134,6 +161,7 @@ public class Integrator extends JFrame
 				{
 					public void actionPerformed(ActionEvent arg0)
 					{
+						console.setText("");
 						integrand.setText("");
 						lbound.setText("");
 						ubound.setText("");
@@ -181,22 +209,6 @@ public class Integrator extends JFrame
 		verticalBox.add(optionsPanel);
 		verticalBox.add(resultBox);
 		verticalBox.add(integralPanel);
-		
-		
-		//horizBox = Box.createHorizontalBox();
-		//horizBox.add(verticalBox);
-		//horizBox.add(graphPanel);
-		
-		entireGUI.add(verticalBox);
-		entireGUI.add(graphPanel);
-		
-		add(entireGUI);
-		pack();
-		integral.setVisible(false);
-		entireGUI.setVisible(true);
-		this.setContentPane(entireGUI);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
 	}
 	
 	private void calculate() throws Exception
@@ -205,7 +217,9 @@ public class Integrator extends JFrame
 		lb = Double.parseDouble(lbound.getText());
 		ub = Double.parseDouble(ubound.getText());
 		sam = Integer.parseInt(samples.getText());
+		console.setText("");
 		
+		addMessage("Parsing...");
 		eval.parse(eq);
 		
 		Map<String, MutableDouble> varSet = eval.getKeys();
@@ -218,15 +232,18 @@ public class Integrator extends JFrame
 		}
 		String key = vars.iterator().next();
 		
+		addMessage("Generating random X values...");
 		double[][] vals = new double[sam][2];
 		for(int i = 0; i < vals.length; i++){ 
 			vals[i][0] = randInBound();
 		}
 		
-		MergeSort sorter = new MergeSort();
+		addMessage("Sorting...");
+		MergeSorter sorter = new MergeSorter();
 		sorter.sort(vals);
 	
 		double sum = 0;
+		addMessage("Calculating...");
 		if(mid.isSelected())
 		{
 			//Creates a new array new values in the middle of the previously selected ones.
@@ -280,20 +297,9 @@ public class Integrator extends JFrame
 		avgval.setText((1/(ub-lb))*sum+"");
 		area.setText(sum+"");
 
-		//graphing stuff
-		graphPanel.removeAll();//reset
-		XYSeries xyseries = new XYSeries("");
-		for (int i = 0; i<vals.length; i = i+100) { //plots every 100th point, just for time vs. result efficiency
-			xyseries.add(vals[i][0], vals[i][1]);
-		}
-		XYSeriesCollection xy = new XYSeriesCollection();
-		xy.addSeries(xyseries);
-		XYDataset xydataset = xy;
-		JFreeChart jfreechart = ChartFactory.createXYLineChart("Graph", "X", "Y", xydataset, PlotOrientation.VERTICAL, false, false, false);
-		XYPlot xyplot = (XYPlot) jfreechart.getPlot();
-		xyplot.getDomainAxis().setLowerMargin(0.0D);
-		xyplot.getDomainAxis().setUpperMargin(0.0D);
-		JPanel chartpanel = new ChartPanel(jfreechart);
+		addMessage("Graphing...");
+		JPanel chartpanel = graphEquation(vars, vals);
+		
 		graphPanel.add(chartpanel);
 		graphPanel.setVisible(true);
 		entireGUI.add(graphPanel);
@@ -302,65 +308,29 @@ public class Integrator extends JFrame
 		latexRender();
 	
 	}
-	
-	
-	
-	
-	
-	
-	private class MergeSort {
-	     
-	    private double[][] array;
-	    private double[][] tempMergArr;
-	    private int length;
-	     
-	    public void sort(double inputArr[][]) {
-	        this.array = inputArr;
-	        this.length = inputArr.length;
-	        this.tempMergArr = new double[length][2];
-	        doMergeSort(0, length - 1);
-	    }
-	 
-	    private void doMergeSort(int lowerIndex, int higherIndex) {
-	         
-	        if (lowerIndex < higherIndex) {
-	            int middle = lowerIndex + (higherIndex - lowerIndex) / 2;
-	            // Below step sorts the left side of the array
-	            doMergeSort(lowerIndex, middle);
-	            // Below step sorts the right side of the array
-	            doMergeSort(middle + 1, higherIndex);
-	            // Now merge both sides
-	            mergeParts(lowerIndex, middle, higherIndex);
-	        }
-	    }
-	 
-	    private void mergeParts(int lowerIndex, int middle, int higherIndex) {
-	 
-	        for (int i = lowerIndex; i <= higherIndex; i++) {
-	            tempMergArr[i] = array[i];
-	        }
-	        int i = lowerIndex;
-	        int j = middle + 1;
-	        int k = lowerIndex;
-	        while (i <= middle && j <= higherIndex) {
-	            if (tempMergArr[i][0] <= tempMergArr[j][0]) {
-	                array[k] = tempMergArr[i];
-	                i++;
-	            } else {
-	                array[k] = tempMergArr[j];
-	                j++;
-	            }
-	            k++;
-	        }
-	        while (i <= middle) {
-	            array[k] = tempMergArr[i];
-	            k++;
-	            i++;
-	        }
-	 
-	    }
-	}
 
+	private JPanel graphEquation(Set<String> vars, double[][] vals) {
+		graphPanel.removeAll();//reset
+		XYSeries graphPoints = new XYSeries("");
+		for (int i = 0; i<vals.length; i += 100) { //plots every 100th point, just for time vs. result efficiency
+			graphPoints.add(vals[i][0], vals[i][1]);
+		}
+		XYSeriesCollection xy = new XYSeriesCollection();
+		xy.addSeries(graphPoints);
+		
+		String varName = vars.iterator().next();		//Properly name the variable
+		JFreeChart jfreechart = ChartFactory.createXYLineChart("Graph", varName, "f(" + varName + ")", xy, PlotOrientation.VERTICAL, false, false, false);
+		XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+		xyplot.getDomainAxis().setLowerMargin(0.0D);
+		xyplot.getDomainAxis().setUpperMargin(0.0D);
+		JPanel chartpanel = new ChartPanel(jfreechart);
+		return chartpanel;
+	}
+	
+	private void addMessage(String msg){
+		console.setText(console.getText() + "\n" + msg);
+		repaint();
+	}
 
 	private double randInBound(){
 		return lb + ((ub-lb)*Math.random());
