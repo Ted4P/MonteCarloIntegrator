@@ -235,13 +235,16 @@ public class Integrator extends JFrame
 		addMessage("Generating random X values...");
 		double[][] vals = new double[sam][2];
 		for(int i = 0; i < vals.length; i++){ 
-			vals[i][0] = randInBound();
+			vals[i][0] = lb + ((ub-lb)*Math.random());
 		}
 		
 		addMessage("Sorting...");
+		long time = System.currentTimeMillis();
 		MergeSorter sorter = new MergeSorter();
 		sorter.sort(vals);
-	
+		time= System.currentTimeMillis() - time;
+		System.out.println("GENERATING RANDS TOOK: " + time);
+		
 		double sum = 0;
 		addMessage("Calculating...");
 		if(mid.isSelected())
@@ -332,11 +335,6 @@ public class Integrator extends JFrame
 		console.setText(console.getText() + "\n" + msg);
 		console.update(console.getGraphics());
 	}
-
-	private double randInBound(){
-		return lb + ((ub-lb)*Math.random());
-	}
-	
 	
 	private void latexRender(){
 		
