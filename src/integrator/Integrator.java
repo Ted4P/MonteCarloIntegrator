@@ -329,7 +329,6 @@ public class Integrator extends JFrame
 	
 	private void addMessage(String msg){
 		console.setText(console.getText() + "\n" + msg);
-		repaint();
 	}
 
 	private double randInBound(){
