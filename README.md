@@ -7,4 +7,5 @@ This project is a single variate integrator, built in Java with a Swing GUI, usi
 
 ###Project goals
 Solids of revolution- tell program to revolve function around X or Y axis
+
 Graph settings- add X && Y axis, sample frequency, etc
