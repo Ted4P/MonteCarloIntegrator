@@ -1,13 +1,11 @@
 package integrator;
 
 //Logic
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Set;
+import evaluator.Evaluator;
+import evaluator.MutableDouble;
 
 //Swing
 import javax.swing.Box;
@@ -20,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 //Graphing
 import org.jfree.chart.ChartFactory;
@@ -29,13 +29,13 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import java.awt.image.BufferedImage;
 //LateX
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
-import evaluator.Evaluator;
-import evaluator.MutableDouble;
+
 
 public class Integrator extends JFrame 
 {
