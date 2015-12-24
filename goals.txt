@@ -1,0 +1,2 @@
+Solids of revolution- tell program to revolve around X || Y axis
+Graph settings- add X && Y axis, sample frequency, etc
