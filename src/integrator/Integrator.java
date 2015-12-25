@@ -217,9 +217,13 @@ public class Integrator extends JFrame
 	private void calculate() throws Exception
 	{
 		eq = integrand.getText();
-		lb = Double.parseDouble(lbound.getText());
-		ub = Double.parseDouble(ubound.getText());
-		sam = Integer.parseInt(samples.getText());
+		Evaluator boundEval = new Evaluator();
+		boundEval.parse(lbound.getText());
+		lb = boundEval.evaluate();
+		boundEval.parse(ubound.getText());
+		ub = boundEval.evaluate();
+		boundEval.parse(samples.getText());
+		sam = (int)boundEval.evaluate();
 		console.setText("");
 
 		addMessage("Parsing...");
