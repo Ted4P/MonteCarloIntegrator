@@ -272,7 +272,7 @@ public class Integrator extends JFrame
 
 	private double buildEstimate(Map<Character, MutableDouble> varSet, double[][] vals) throws Exception {
 		double sum = 0;
-		char key = varSet.keySet().iterator().next();
+		Character key = varSet.keySet().iterator().next();
 		if(mid.isSelected() || simp.isSelected())
 		{
 			//Creates a new array new values in the middle of the previously selected ones.
