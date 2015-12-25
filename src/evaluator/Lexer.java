@@ -32,7 +32,7 @@ public class Lexer {
 				Func posFunc = getFunc(function, lexed);
 				if(posFunc!=null) lexed.add(posFunc);
 				else{		//Add a var with the given name
-					lexed.add(new Var("" + function.charAt(pointer)));
+					lexed.add(new Var(function.charAt(pointer)));
 					pointer++;
 				}
 			}

@@ -17,14 +17,14 @@ public class MultiVar {
 		eval.parse(equation);
 		System.out.println("SIMPLIFIED EQUATION: " + eval.toString());
 		
-		Map<String, MutableDouble> vars = eval.getKeys();
-		Set<String> varNames = vars.keySet();
+		Map<Character, MutableDouble> vars = eval.getKeys();
+		Set<Character> varNames = vars.keySet();
 		int numVars = vars.size();
 		if(numVars==0) return;
 		
 		double[][] varBounds = new double[numVars][2];		//Lower and upper bound for each var
 		int i = 0;
-		for(String varName: varNames){
+		for(char varName: varNames){
 			System.out.println("Lower bound for " + varName);
 			varBounds[i][0] = scan.nextDouble();
 			System.out.println("Upper bound for " + varName);
@@ -38,7 +38,7 @@ public class MultiVar {
 		double sum = 0;
 		for(int j = 0; j < samples; j++){
 			int k = 0;
-			for(String var: varNames){
+			for(char var: varNames){
 				vars.get(var).setVal(randInBound(varBounds[k]));
 				k++;
 			}

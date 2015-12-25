@@ -1,12 +1,13 @@
 package evaluator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 
 public class Evaluator {
 	Node mainNode;
-	public Map<String, MutableDouble> getKeys(){
-		Map<String, MutableDouble> map = new TreeMap<String, MutableDouble>();
+	public Map<Character, MutableDouble> getKeys(){
+		Map<Character, MutableDouble> map = new HashMap<Character, MutableDouble>();
 		mainNode.addKeys(map);
 		return map;
 	}
@@ -15,7 +16,7 @@ public class Evaluator {
 		 mainNode.simplify();
 	}
 	
-	public double evaluate(Map<String, MutableDouble> varSet) throws Exception{
+	public double evaluate(Map<Character, MutableDouble> varSet) throws Exception{
 		return mainNode.eval(varSet);
 	}
 	public double evaluate() throws Exception{

@@ -4,25 +4,25 @@ import java.util.Map;
 
 
 public class Var extends Operand{
-	private String key;
+	private Character key;
 	
-	public Var(String key){
+	public Var(Character key){
 		this.key = key;
 	}
 
-	public String toString(){return key;}
+	public String toString(){return key + "";}
 
 	public int getNumVals() {
 		return 1;
 	}
 	
-	public String getKey(){return key;}
+	public Character getKey(){return key;}
 
 	public double eval(ArrayList<Double> vals) {
 		return vals.get(0);
 	}
 	
-	public double eval(Map<String, MutableDouble> vals){
+	public double eval(Map<Character, MutableDouble> vals){
 		return vals.get(key).getVal();
 	}
 

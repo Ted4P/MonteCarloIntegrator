@@ -229,8 +229,8 @@ public class Integrator extends JFrame
 		addMessage("Parsing...");
 		eval.parse(eq);
 
-		Map<String, MutableDouble> varSet = eval.getKeys();
-		Set<String> vars = varSet.keySet();
+		Map<Character, MutableDouble> varSet = eval.getKeys();
+		Set<Character> vars = varSet.keySet();
 
 		if(vars.size()!=1)
 		{
@@ -270,9 +270,9 @@ public class Integrator extends JFrame
 
 	}
 
-	private double buildEstimate(Map<String, MutableDouble> varSet, double[][] vals) throws Exception {
+	private double buildEstimate(Map<Character, MutableDouble> varSet, double[][] vals) throws Exception {
 		double sum = 0;
-		String key = varSet.keySet().iterator().next();
+		char key = varSet.keySet().iterator().next();
 		if(mid.isSelected() || simp.isSelected())
 		{
 			//Creates a new array new values in the middle of the previously selected ones.
@@ -337,7 +337,7 @@ public class Integrator extends JFrame
 		return sum;
 	}
 
-	private JPanel graphEquation(Set<String> vars, double[][] vals) {
+	private JPanel graphEquation(Set<Character> vars, double[][] vals) {
 		graphPanel.removeAll();//reset
 		XYSeries graphPoints = new XYSeries("");
 		for (int i = 0; i<vals.length; i += 100) { //plots every 100th point, just for time vs. result efficiency
@@ -346,8 +346,8 @@ public class Integrator extends JFrame
 		XYSeriesCollection xy = new XYSeriesCollection();
 		xy.addSeries(graphPoints);
 
-		String varName = vars.iterator().next();		//Properly name the variable
-		JFreeChart jfreechart = ChartFactory.createXYLineChart("Graph", varName, "f(" + varName + ")", xy, PlotOrientation.VERTICAL, false, false, false);
+		char varName = vars.iterator().next();		//Properly name the variable
+		JFreeChart jfreechart = ChartFactory.createXYLineChart("Graph", "" + varName, "f(" + varName + ")", xy, PlotOrientation.VERTICAL, false, false, false);
 		XYPlot xyplot = (XYPlot) jfreechart.getPlot();
 		xyplot.getDomainAxis().setLowerMargin(0.0D);
 		xyplot.getDomainAxis().setUpperMargin(0.0D);

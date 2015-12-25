@@ -71,7 +71,7 @@ public class Node {
 		return eval(null);
 	}
 	
-	public double eval(Map<String, MutableDouble> varSet) throws Exception{
+	public double eval(Map<Character, MutableDouble> varSet) throws Exception{
 		if(mainFunc instanceof Var){
 			return ((Var)mainFunc).eval(varSet);
 		}
@@ -85,7 +85,7 @@ public class Node {
 	}
 
 
-	public void addKeys(Map<String, MutableDouble> map) {
+	public void addKeys(Map<Character, MutableDouble> map) {
 		if(children == null || children.size() == 0){
 			if(mainFunc instanceof Var){
 				map.put(((Var)mainFunc).getKey(), new MutableDouble());

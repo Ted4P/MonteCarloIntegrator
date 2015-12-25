@@ -14,11 +14,11 @@ public class EvaluatorTest {
 	public void testGetKeys() {
 		Evaluator eval = new Evaluator();
 		eval.parse("5X+Sin(Y^(2-X))2");
-		Map<String, MutableDouble> keys = eval.getKeys();
+		Map<Character, MutableDouble> keys = eval.getKeys();
 		
 		assertEquals(2, keys.size());
-		assertNull(keys.get("A"));
-		assertNotNull(keys.get("X"));
+		assertNull(keys.get('A'));
+		assertNotNull(keys.get('X'));
 	}
 
 	@Test
@@ -35,11 +35,11 @@ public class EvaluatorTest {
 		Evaluator eval = new Evaluator();
 		eval.parse("5X+Cos(Y)");
 		
-		Map<String, MutableDouble> vars = eval.getKeys();
+		Map<Character, MutableDouble> vars = eval.getKeys();
 		assertNotNull(vars);
 		
-		vars.get("X").setVal(3);
-		vars.get("Y").setVal(Math.PI);
+		vars.get('X').setVal(3);
+		vars.get('Y').setVal(Math.PI);
 		
 		assertEquals(14, eval.evaluate(vars), DOUBLE__TOL);
 	}
@@ -47,7 +47,7 @@ public class EvaluatorTest {
 	@Test
 	public void testImplicitMult() throws Exception{
 		Evaluator eval = new Evaluator();
-		Map<String, MutableDouble> vars;
+		Map<Character, MutableDouble> vars;
 		
 		eval.parse("5X");
 		vars = eval.getKeys();
