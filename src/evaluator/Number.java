@@ -8,8 +8,6 @@ public class Number extends Operand{
 	public Number(double val){
 		this.val = val;
 	}
-	
-	public boolean isANumber() {return true;}
 
 	public String toString(){return ""+val;}
 
