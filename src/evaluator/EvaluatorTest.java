@@ -51,7 +51,7 @@ public class EvaluatorTest {
 		
 		eval.parse("5X");
 		vars = eval.getKeys();
-		vars.get("X").setVal(2);
+		vars.get('X').setVal(2);
 		assertEquals(10, eval.evaluate(vars), DOUBLE__TOL);
 		
 		eval.parse("5(7)");
@@ -59,7 +59,7 @@ public class EvaluatorTest {
 		
 		eval.parse("(2)X");
 		vars = eval.getKeys();
-		vars.get("X").setVal(2);
+		vars.get('X').setVal(2);
 		assertEquals(4, eval.evaluate(vars), DOUBLE__TOL);
 		
 		eval.parse("(1)(7)");
