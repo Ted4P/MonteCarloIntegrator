@@ -26,4 +26,9 @@ public class Evaluator {
 	public String toString(){
 		return mainNode.toString();
 	}
+	
+	public void derive(Character key){
+		mainNode = mainNode.derive(key);
+		mainNode.simplify();
+	}
 }

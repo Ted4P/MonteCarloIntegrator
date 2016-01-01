@@ -19,7 +19,7 @@ import functions.UnaryMinus;
 public class Lexer {
 	public static int pointer;
 	public static ArrayList<Func> lex(String function) {
-		//if(checkErrors(function)) throw new Exception(); TODO: Syntactic error checking
+		if(!validSyntax(function)) return null;
 		function = function.replaceAll("\\s", "");
 		ArrayList<Func> lexed = new ArrayList<Func>();
 		pointer = 0;
@@ -41,6 +41,17 @@ public class Lexer {
 		return lexed;
 	}
 	
+	private static boolean validSyntax(String function) {
+		int paren = 0, len = function.length();
+		for(int i = 0; i < len; i++){
+			if(function.charAt(i)=='(') paren++;
+			else if(function.charAt(i)==')') paren--;
+			
+			if(paren < 0) return false;
+		}
+		return paren ==0;
+	}
+
 	private static void handleImplcitMult(ArrayList<Func> lexed){
 		int i = 0;
 		while(i < lexed.size() -1){

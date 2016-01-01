@@ -1,7 +1,7 @@
 package functions;
 import java.util.ArrayList;
 
-import evaluator.Operand;
+import evaluator.*;
 
 
 public class Add extends Operand {
@@ -17,5 +17,20 @@ public class Add extends Operand {
 	}
 
 	public String toString(){return "+";}
+
+	@Override
+	public ArrayList<Func> derive(ArrayList<Node> children, Character key) {
+		ArrayList<Func> temp = new ArrayList<Func>();
+		
+		temp.add(new OpenParen());
+		temp.addAll(children.get(0).derive(key));
+		temp.add(new CloseParen());
+		temp.add(new Add());
+		temp.add(new OpenParen());
+		temp.addAll(children.get(1).derive(key));
+		temp.add(new CloseParen());
+		
+		return temp;
+	}
 
 }

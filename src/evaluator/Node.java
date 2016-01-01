@@ -7,11 +7,12 @@ public class Node {
 	private ArrayList<Node> children;
 	
 	public Node(ArrayList<Func> function){
-	while(stripLeadTail(function));
-	if(function.size()==1){
-		mainFunc = (Operand) function.get(0);
-	}
-	else{
+		if(function==null) return;
+		while(stripLeadTail(function));
+		if(function.size()==1){
+			mainFunc = (Operand) function.get(0);
+		}
+		else{
 			children = new ArrayList<Node>();
 			int index = findHighestOp(function);
 			mainFunc = (Operand)function.get(index);
@@ -23,6 +24,10 @@ public class Node {
 				children.add(new Node(subList(index + 1, function.size(), function)));
 			}
 	}
+	}
+
+	public Node(Func func) {
+		mainFunc = (Operand) func;
 	}
 
 	private static ArrayList<Func> subList(int start, int end, ArrayList<Func> function) {
@@ -65,6 +70,16 @@ public class Node {
 			}
 		}
 		return index;
+	}
+	
+	public Node(Operand op, Node child1, Node child2){
+		mainFunc = op;
+		children = new ArrayList<Node>();
+		if(child1!=null){
+			children.add(child1);
+			if(child2!=null) 
+				children.add(child2);
+		}
 	}
 	
 	public double eval() throws Exception {
@@ -119,5 +134,9 @@ public class Node {
 		if(children==null || children.size()==0) return mainFunc.toString();
 		if(children.size()==1) return mainFunc.toString() + "(" + children.get(0) +")";
 		return "(" + children.get(0) +")"+ mainFunc.toString() + "(" + children.get(1) +")";
+	}
+
+	public Node derive(Character key) {
+		return mainFunc.derive(children, key);
 	}
 }

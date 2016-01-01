@@ -29,4 +29,9 @@ public class Var extends Operand{
 	public int getOrderOps() {
 		return 0;
 	}
+
+	public Node derive(ArrayList<Node> children, Character key) {
+		if(key.equals(this.key)) return new Node(new Number(1),null,null);
+		return new Node(new Number(0),null,null);
+	}
 }
