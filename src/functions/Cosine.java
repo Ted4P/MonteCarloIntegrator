@@ -21,7 +21,8 @@ public class Cosine extends Operand {
 
 	public Node derive(ArrayList<Node> children, Character key)
 	{
-		return new Node(new Mul(), new Node(new Mul(), new Node(new Sine(), children.get(0), null), new Node(new Number(-1))), children.get(0).derive(key)); //Chain rule
+		return new Node(new Mul(), new Node(new Mul(), new Node(new Sine(), children.get(0), null), new Node(new Number(-1))), children.get(0).derive(key)); 
+		//Chain rule
 	}
 
 }

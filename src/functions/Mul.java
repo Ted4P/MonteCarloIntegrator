@@ -20,6 +20,8 @@ public class Mul extends Operand {
 
 	public Node derive(ArrayList<Node> children, Character key) 
 	{
-		return new Node(new Add(), new Node(new Mul(), children.get(0).derive(key), children.get(1)), new Node(new Mul(), children.get(0), children.get(1)).derive(key));
+		return new Node(new Add(), new Node(new Mul(), children.get(0).derive(key), children.get(1)), new Node(new Mul(), children.get(0), 
+				children.get(1)).derive(key)); 
+		//Product rule: f'(x)*g(x)+f(x)*g'(x)
 	}
 }

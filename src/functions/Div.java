@@ -1,7 +1,9 @@
 package functions;
 import java.util.ArrayList;
 
+import evaluator.Node;
 import evaluator.Operand;
+import evaluator.Number;
 
 public class Div extends Operand {
 
@@ -17,4 +19,10 @@ public class Div extends Operand {
 
 	public String toString(){return "/";}
 
+	public Node derive(ArrayList<Node> children, Character key)
+	{
+		return new Node(new Div(), new Node(new Sub(), new Node(new Mul(), children.get(0).derive(key), children.get(1)), new Node(new Mul(), children.get(0),
+				children.get(1).derive(key))), new Node(new Exp(), children.get(1), new Node(new Number(2))));
+		//Quotient rule: (f'(x)*g(x)-f(x)g'(x)) / ((g(x))^2)
+	}
 }
