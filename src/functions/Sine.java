@@ -22,4 +22,8 @@ public class Sine extends Operand {
 		return new Node(new Mul(), new Node(new Cosine(), children.get(0), null), children.get(0).derive(key));		//Chain rule
 	}
 
+	public void simplify(Node node) {
+		return;
+	}
+
 }

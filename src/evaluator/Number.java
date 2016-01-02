@@ -26,4 +26,8 @@ public class Number extends Operand{
 	public Node derive(ArrayList<Node> children, Character key) {
 		return new Node(new Number(0), null,null);
 	}
+
+	public void simplify(Node node) {
+		return;
+	}
 }

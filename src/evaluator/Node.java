@@ -3,8 +3,36 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Node {
-	private Operand mainFunc;
+	
+	
+	private Operand mainFunc;		//Getters are setters for simplification
+	public Operand getMainFunc() {
+		return mainFunc;
+	}
+
+	public void setMainFunc(Operand mainFunc) {
+		this.mainFunc = mainFunc;
+	}
+
 	private ArrayList<Node> children;
+	
+	public ArrayList<Node> getChildren() {
+		return children;
+	}
+
+	public void setChildren(ArrayList<Node> children) {
+		this.children = children;
+	}
+
+	public void absorbChild(Node child){
+		mainFunc = child.getMainFunc();
+		children = child.getChildren();
+	}
+	
+	public void replaceWithNum(double num){
+		mainFunc = new Number(num);
+		children.clear();
+	}
 	
 	public Node(ArrayList<Func> function){
 		if(function==null) return;
@@ -118,16 +146,23 @@ public class Node {
 		
 		for(Node child: children) child.simplify();
 		ArrayList<Double> vals = new ArrayList<Double>();
+		boolean allNum = true;
 		for(Node child: children){
 			try{
 				vals.add(child.eval());
 			}
 			catch (Exception ex){
-				return;
+				allNum = false;
 			}
 		}
-		mainFunc = new Number(mainFunc.eval(vals));			//Replace the function with a constant, and remove children
-		children.clear();
+		if(allNum){
+			mainFunc = new Number(mainFunc.eval(vals));			//Replace the function with a constant, and remove children
+			children.clear();
+		}
+		else{
+			System.out.println("FUNC SIMPLIFICATION: " + mainFunc);
+			mainFunc.simplify(this);
+		}
 	}
 	
 	public String toString(){

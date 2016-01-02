@@ -25,4 +25,9 @@ public class Tangent extends Operand {
 				new Node(new Number(2)))), children.get(0).derive(key));
 		//Power rule: d/dx(tan(g(x)) = (1/((cos(g(x)))^2)) * g'(x)
 	}
+
+	@Override
+	public void simplify(Node node) {
+		return;
+	}
 }

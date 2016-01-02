@@ -25,4 +25,13 @@ public class Div extends Operand {
 				children.get(1).derive(key))), new Node(new Exp(), children.get(1), new Node(new Number(2))));
 		//Quotient rule: (f'(x)*g(x)-f(x)g'(x)) / ((g(x))^2)
 	}
+
+	public void simplify(Node node) {
+		try {
+			double val = node.getChildren().get(0).eval();
+			if(Math.abs(val) < DOUBLE_TOL) node.replaceWithNum(0);
+		} catch (Exception e) {
+		}
+		
+	}
 }

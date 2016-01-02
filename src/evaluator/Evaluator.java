@@ -35,6 +35,7 @@ public class Evaluator {
 	public static void main(String[] args){
 		Evaluator eval = new Evaluator();
 		eval.parse("Sin(X)");
+		System.out.println(eval.toString());
 		eval.derive('X');
 		System.out.println(eval.toString());
 	}

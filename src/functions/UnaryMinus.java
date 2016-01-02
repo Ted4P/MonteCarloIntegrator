@@ -1,7 +1,9 @@
 package functions;
 import java.util.ArrayList;
 
+import evaluator.Node;
 import evaluator.Operand;
+import evaluator.Number;
 
 public class UnaryMinus extends Operand {
 
@@ -16,5 +18,15 @@ public class UnaryMinus extends Operand {
 	}
 
 	public String toString(){return "-";}
+
+	@Override
+	public Node derive(ArrayList<Node> children, Character key) {
+		return new Node(new Mul(), new Node(new Number(-1), null,null), children.get(0).derive(key));
+	}
+
+	@Override
+	public void simplify(Node node) {
+		return;
+	}
 
 }

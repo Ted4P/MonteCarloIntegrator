@@ -34,4 +34,9 @@ public class Var extends Operand{
 		if(key.equals(this.key)) return new Node(new Number(1),null,null);
 		return new Node(new Number(0),null,null);
 	}
+
+	@Override
+	public void simplify(Node node) {
+		return;
+	}
 }

@@ -25,4 +25,8 @@ public class Cosine extends Operand {
 		//Chain rule
 	}
 
+	public void simplify(Node node) {
+		return;
+	}
+
 }
