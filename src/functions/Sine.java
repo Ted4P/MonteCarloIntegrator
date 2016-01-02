@@ -1,6 +1,7 @@
 package functions;
 import java.util.ArrayList;
 
+import evaluator.Node;
 import evaluator.Operand;
 
 public class Sine extends Operand {
@@ -16,5 +17,9 @@ public class Sine extends Operand {
 	}
 
 	public String toString(){return "sin";}
+
+	public Node derive(ArrayList<Node> children, Character key) {
+		return new Node(new Mul(), new Node(new Cosine(), children.get(0), null), children.get(0).derive(key));		//Chain rule
+	}
 
 }

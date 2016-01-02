@@ -31,4 +31,11 @@ public class Evaluator {
 		mainNode = mainNode.derive(key);
 		mainNode.simplify();
 	}
+	
+	public static void main(String[] args){
+		Evaluator eval = new Evaluator();
+		eval.parse("Sin(X)");
+		eval.derive('X');
+		System.out.println(eval.toString());
+	}
 }

@@ -19,18 +19,8 @@ public class Add extends Operand {
 	public String toString(){return "+";}
 
 	@Override
-	public ArrayList<Func> derive(ArrayList<Node> children, Character key) {
-		ArrayList<Func> temp = new ArrayList<Func>();
-		
-		temp.add(new OpenParen());
-		temp.addAll(children.get(0).derive(key));
-		temp.add(new CloseParen());
-		temp.add(new Add());
-		temp.add(new OpenParen());
-		temp.addAll(children.get(1).derive(key));
-		temp.add(new CloseParen());
-		
-		return temp;
+	public Node derive(ArrayList<Node> children, Character key) {
+		return new Node(new Add(), children.get(0).derive(key), children.get(1).derive(key));
 	}
 
 }
