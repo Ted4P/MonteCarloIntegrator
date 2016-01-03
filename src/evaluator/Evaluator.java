@@ -33,8 +33,8 @@ public class Evaluator {
 	
 	public static void main(String[] args){
 		Evaluator eval = new Evaluator();
-		eval.parse("5+-(3^-X)");
-		eval.derive('X');
+		eval.parse("ln(e)+XSin(pi)");
+		//eval.derive('X');
 		System.out.println(eval.toString());
 	}
 }

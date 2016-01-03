@@ -7,9 +7,11 @@ import java.util.TreeMap;
 import functions.Add;
 import functions.Cosine;
 import functions.Div;
+import functions.E;
 import functions.Exp;
 import functions.Ln;
 import functions.Mul;
+import functions.Pi;
 import functions.Sine;
 import functions.Sqrt;
 import functions.Sub;
@@ -18,7 +20,7 @@ import functions.UnaryMinus;
 
 
 public class Lexer {
-	public static int pointer;
+	private static int pointer;
 	public static ArrayList<Func> lex(String function) {
 		if(!validSyntax(function)) return null;
 		function = function.replaceAll("\\s", "");
@@ -84,6 +86,7 @@ public class Lexer {
 		funcs.put("+", add);funcs.put("-", sub);funcs.put("*", mul);funcs.put("/", div);funcs.put("^", exp);funcs.put("sqrt", sqrt);
 		funcs.put("sin", sin);funcs.put("Sin", sin);funcs.put("cos", cos);funcs.put("Cos", cos);funcs.put("tan", tan);funcs.put("Tan", tan);
 		funcs.put("ln", ln); funcs.put("Ln", ln);
+		funcs.put("e", new E()); funcs.put("pi", new Pi());
 		return funcs;
 	}
 	
