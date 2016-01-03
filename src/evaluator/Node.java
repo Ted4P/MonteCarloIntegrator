@@ -1,27 +1,21 @@
 package evaluator;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Node {
 	
 	
 	private Operand mainFunc;		//Getters are setters for simplification
+	
 	public Operand getMainFunc() {
 		return mainFunc;
-	}
-
-	public void setMainFunc(Operand mainFunc) {
-		this.mainFunc = mainFunc;
 	}
 
 	private ArrayList<Node> children;
 	
 	public ArrayList<Node> getChildren() {
 		return children;
-	}
-
-	public void setChildren(ArrayList<Node> children) {
-		this.children = children;
 	}
 
 	public void absorbChild(Node child){
@@ -37,11 +31,14 @@ public class Node {
 	public boolean hasVar(Character key){
 		if(mainFunc instanceof Number) return false;
 		if(mainFunc instanceof Var) return ((Var) mainFunc).getKey().equals(key);
-		if(children.size()==1) return children.get(0).hasVar(key);
-		return children.get(0).hasVar(key) || children.get(1).hasVar(key);
+		for(Node child: children){
+			if(child.hasVar(key))
+				return true;
+		}
+		return false;
 	}
 	
-	public Node(ArrayList<Func> function){
+	public Node(List<Func> function){
 		if(function==null) return;
 		while(stripLeadTail(function));
 		if(function.size()==1){
@@ -52,11 +49,13 @@ public class Node {
 			int index = findHighestOp(function);
 			mainFunc = (Operand)function.get(index);
 			if(mainFunc.getNumVals()==1) {
-				children.add(new Node(subList(index + 1, function.size(), function)));
+				function.remove(0);
+				children.add(new Node(function));
 			}
 			else if (mainFunc.getNumVals()==2) {
+				
 				children.add(new Node(subList(0, index, function)));
-				children.add(new Node(subList(index + 1, function.size(), function)));
+				children.add(new Node(subList(index+1, function.size(), function)));
 			}
 	}
 	}
@@ -65,7 +64,7 @@ public class Node {
 		mainFunc = (Operand) func;
 	}
 
-	private static ArrayList<Func> subList(int start, int end, ArrayList<Func> function) {
+	private static ArrayList<Func> subList(int start, int end, List<Func> function) {
 		
 		ArrayList<Func> subList = new ArrayList<Func>();
 		for(int i = start; i < end; i++){
@@ -74,7 +73,7 @@ public class Node {
 		return subList;
 	}
 
-	private boolean stripLeadTail(ArrayList<Func> function) {
+	private boolean stripLeadTail(List<Func> function) {
 		int currParenLevel = 1;
 		if(!(function.get(0) instanceof Paren && function.get(function.size() - 1) instanceof Paren)) return false; 	//If the func does not start+end with ( and ), exit
 		for(int i = 1; i < function.size() - 1; i++){	//If the paren depth is ever ==0 before the end, exit
@@ -89,7 +88,7 @@ public class Node {
 		return true;
 	}
 
-	private int findHighestOp(ArrayList<Func> function) {
+	private int findHighestOp(List<Func> function) {
 		int highestOp = -1;
 		int index = -1;
 		int parenNum=0;

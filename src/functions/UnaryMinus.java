@@ -11,7 +11,7 @@ public class UnaryMinus extends Operand {
 		return 1;
 	}
 	
-	public int getOrderOps(){return 5;}
+	public int getOrderOps(){return 1;}
 
 	public double eval(ArrayList<Double> vals) {
 		return -1 * vals.get(0);

@@ -34,7 +34,7 @@ public class Evaluator {
 	
 	public static void main(String[] args){
 		Evaluator eval = new Evaluator();
-		eval.parse("ln(X)");
+		eval.parse("5+-(3^-X)");
 		eval.derive('X');
 		System.out.println(eval.toString());
 	}
