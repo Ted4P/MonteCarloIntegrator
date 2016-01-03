@@ -33,14 +33,9 @@ public class Exp extends Operand {
 			
 			return new Node(new Mul(), ndx, xn);
 		}
-		try {
-			Node ndx = new Node(new Mul(), exp.derive(key), new Node(new Ln(), base, null));
-			Node nx = new Node(new Exp(), base, exp);
-			return new Node(new Mul(), ndx, nx);
-		} catch (Exception e) {
-			//Will never occur
-			return null;
-		}
+		Node ndx = new Node(new Mul(), exp.derive(key), new Node(new Ln(), base, null));
+		Node nx = new Node(new Exp(), base, exp);
+		return new Node(new Mul(), ndx, nx);
 	}
 
 	@Override
