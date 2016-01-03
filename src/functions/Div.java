@@ -27,11 +27,16 @@ public class Div extends Operand {
 	}
 
 	public void simplify(Node node) {
+		ArrayList<Node> children = node.getChildren();
 		try {
-			double val = node.getChildren().get(0).eval();
+			double val = children.get(0).eval();						//	0/X == 0
 			if(Math.abs(val) < DOUBLE_TOL) node.replaceWithNum(0);
 		} catch (Exception e) {
 		}
-		
+		try {
+			double val = children.get(1).eval();
+			if(Math.abs(val) < DOUBLE_TOL) node.absorbChild(children.get(0));		//	X/1 == X
+		} catch (Exception e) {
+		}
 	}
 }
