@@ -1,6 +1,7 @@
 package evaluator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public class Node {
@@ -74,14 +75,16 @@ public class Node {
 	}
 
 	private boolean stripLeadTail(List<Func> function) {
-		int currParenLevel = 1;
+		int count = 1;
 		if(!(function.get(0) instanceof Paren && function.get(function.size() - 1) instanceof Paren)) return false; 	//If the func does not start+end with ( and ), exit
-		for(int i = 1; i < function.size() - 1; i++){	//If the paren depth is ever ==0 before the end, exit
-			if(function.get(i) instanceof Paren){
-				if(function.get(i) instanceof OpenParen) currParenLevel++;
-				else currParenLevel--;
-			}
-			if(currParenLevel==0) return false;
+		
+		ListIterator<Func> it = function.listIterator(1);
+		while(it.nextIndex()< function.size()-1){
+			Func func = it.next();
+			if(func instanceof OpenParen) count++;
+			else if(func instanceof CloseParen) count--;
+			
+			if(count==0)return false;
 		}
 		function.remove(function.size()-1);
 		function.remove(0);
