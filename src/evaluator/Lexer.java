@@ -24,13 +24,14 @@ public class Lexer {
 		function = function.replaceAll("\\s", "");
 		ArrayList<Func> lexed = new ArrayList<Func>();
 		pointer = 0;
+		Map<String, Func> funcs = buildMap();
 		while(pointer < function.length()){
 			if(isNumber(function, pointer)){ 	
 				lexed.add(getNumber(function));
 			}
 			else if(isParen(function, pointer)) lexed.add(getParen(function));
 			else {
-				Func posFunc = getFunc(function, lexed);
+				Func posFunc = getFunc(function, lexed, funcs);
 				if(posFunc!=null) lexed.add(posFunc);
 				else{		//Add a var with the given name
 					lexed.add(new Var(function.charAt(pointer)));
@@ -66,10 +67,7 @@ public class Lexer {
 		}
 	}
 
-	private static Func getFunc(String function, ArrayList<Func> lexed) {		
-		if(pointer < function.length() && function.charAt(pointer)=='-' && (lexed.size()==0 || !(lexed.get(lexed.size()-1) instanceof Number || lexed.get(lexed.size()-1) instanceof Var))){ 
-			pointer++; return new UnaryMinus();
-		}
+	private static Map<String, Func> buildMap(){
 		Map<String, Func> funcs = new TreeMap<String, Func>();
 		
 		Func add = new Add();
@@ -86,6 +84,14 @@ public class Lexer {
 		funcs.put("+", add);funcs.put("-", sub);funcs.put("*", mul);funcs.put("/", div);funcs.put("^", exp);funcs.put("sqrt", sqrt);
 		funcs.put("sin", sin);funcs.put("Sin", sin);funcs.put("cos", cos);funcs.put("Cos", cos);funcs.put("tan", tan);funcs.put("Tan", tan);
 		funcs.put("ln", ln); funcs.put("Ln", ln);
+		return funcs;
+	}
+	
+	private static Func getFunc(String function, ArrayList<Func> lexed, Map<String, Func> funcs) {		
+		if(pointer < function.length() && function.charAt(pointer)=='-' && (lexed.size()==0 || !(lexed.get(lexed.size()-1) instanceof Number || lexed.get(lexed.size()-1) instanceof Var))){ 
+			pointer++; return new UnaryMinus();
+		}
+		
 		
 		Set<String> funcNames = funcs.keySet();
 		for(String name: funcNames){
