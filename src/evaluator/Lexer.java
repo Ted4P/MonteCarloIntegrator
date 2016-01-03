@@ -8,6 +8,7 @@ import functions.Add;
 import functions.Cosine;
 import functions.Div;
 import functions.Exp;
+import functions.Ln;
 import functions.Mul;
 import functions.Sine;
 import functions.Sqrt;
@@ -80,9 +81,11 @@ public class Lexer {
 		Func sin = new Sine();
 		Func cos = new Cosine();
 		Func tan = new Tangent();
+		Func ln = new Ln();
 		
 		funcs.put("+", add);funcs.put("-", sub);funcs.put("*", mul);funcs.put("/", div);funcs.put("^", exp);funcs.put("sqrt", sqrt);
 		funcs.put("sin", sin);funcs.put("Sin", sin);funcs.put("cos", cos);funcs.put("Cos", cos);funcs.put("tan", tan);funcs.put("Tan", tan);
+		funcs.put("ln", ln); funcs.put("Ln", ln);
 		
 		Set<String> funcNames = funcs.keySet();
 		for(String name: funcNames){

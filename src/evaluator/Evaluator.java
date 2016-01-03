@@ -34,8 +34,7 @@ public class Evaluator {
 	
 	public static void main(String[] args){
 		Evaluator eval = new Evaluator();
-		eval.parse("X^3");
-		eval.derive('X');
+		eval.parse("ln(X)");
 		eval.derive('X');
 		System.out.println(eval.toString());
 	}

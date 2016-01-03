@@ -34,7 +34,7 @@ public class Exp extends Operand {
 			return new Node(new Mul(), ndx, xn);
 		}
 		try {
-			Node ndx = new Node(new Mul(), exp.derive(key), new Node(new Number(Math.log(base.eval())), null,null));
+			Node ndx = new Node(new Mul(), exp.derive(key), new Node(new Ln(), base, null));
 			Node nx = new Node(new Exp(), base, exp);
 			return new Node(new Mul(), ndx, nx);
 		} catch (Exception e) {
@@ -48,13 +48,11 @@ public class Exp extends Operand {
 		try {
 			double baseVal = node.getChildren().get(0).eval();
 			if(Math.abs(baseVal)<DOUBLE_TOL) node.replaceWithNum(0);
-			return;
 		} catch (Exception e) {
 		}
 		try {
 			double expVal = node.getChildren().get(1).eval();
 			if(Math.abs(expVal-1)<DOUBLE_TOL) node.absorbChild(node.getChildren().get(0));
-			return;
 		} catch (Exception e) {
 		}
 	}
