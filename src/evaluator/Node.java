@@ -163,8 +163,7 @@ public class Node {
 			}
 		}
 		if(allNum){
-			mainFunc = new Number(mainFunc.eval(vals));			//Replace the function with a constant, and remove children
-			children.clear();
+			replaceWithNum(mainFunc.eval(vals));			//Replace the function with a constant, and remove children
 		}
 		else{
 			mainFunc.simplify(this);
@@ -174,7 +173,7 @@ public class Node {
 	public String toString(){
 		if(children==null || children.size()==0) return mainFunc.toString();
 		if(children.size()==1) return mainFunc.toString() + "(" + children.get(0) +")";
-		return "(" + children.get(0) +")"+ mainFunc.toString() + "(" + children.get(1) +")";
+		return "(" + children.get(0) + mainFunc.toString() + children.get(1) +")";
 	}
 
 	public Node derive(Character key) {
