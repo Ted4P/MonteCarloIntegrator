@@ -45,8 +45,18 @@ public class Exp extends Operand {
 
 	@Override
 	public void simplify(Node node) {
-		// TODO Auto-generated method stub
-		
+		try {
+			double baseVal = node.getChildren().get(0).eval();
+			if(Math.abs(baseVal)<DOUBLE_TOL) node.replaceWithNum(0);
+			return;
+		} catch (Exception e) {
+		}
+		try {
+			double expVal = node.getChildren().get(1).eval();
+			if(Math.abs(expVal-1)<DOUBLE_TOL) node.absorbChild(node.getChildren().get(0));
+			return;
+		} catch (Exception e) {
+		}
 	}
 
 }

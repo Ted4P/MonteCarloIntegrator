@@ -34,8 +34,8 @@ public class Evaluator {
 	
 	public static void main(String[] args){
 		Evaluator eval = new Evaluator();
-		eval.parse("Sin(X)/X");
-		System.out.println(eval.toString());
+		eval.parse("X^3");
+		eval.derive('X');
 		eval.derive('X');
 		System.out.println(eval.toString());
 	}
