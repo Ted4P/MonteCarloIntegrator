@@ -34,6 +34,13 @@ public class Node {
 		children.clear();
 	}
 	
+	public boolean hasVar(Character key){
+		if(mainFunc instanceof Number) return false;
+		if(mainFunc instanceof Var) return ((Var) mainFunc).getKey().equals(key);
+		if(children.size()==1) return children.get(0).hasVar(key);
+		return children.get(0).hasVar(key) || children.get(1).hasVar(key);
+	}
+	
 	public Node(ArrayList<Func> function){
 		if(function==null) return;
 		while(stripLeadTail(function));
@@ -160,7 +167,6 @@ public class Node {
 			children.clear();
 		}
 		else{
-			System.out.println("FUNC SIMPLIFICATION: " + mainFunc);
 			mainFunc.simplify(this);
 		}
 	}

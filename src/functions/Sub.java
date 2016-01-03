@@ -22,4 +22,14 @@ public class Sub extends Operand {
 	{
 		return new Node(new Sub(), children.get(0).derive(key), children.get(1).derive(key));
 	}
+
+	@Override
+	public void simplify(Node node) {
+		ArrayList<Node> children = node.getChildren();
+		try {
+			if(Math.abs(children.get(0).eval()) <DOUBLE_TOL) node.absorbChild(children.get(0));
+		} catch (Exception e) {
+		}
+		
+	}
 }

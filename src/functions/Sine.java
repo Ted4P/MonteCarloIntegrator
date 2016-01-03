@@ -10,7 +10,7 @@ public class Sine extends Operand {
 		return 1;
 	}
 	
-	public int getOrderOps(){return 2;}
+	public int getOrderOps(){return 1;}
 
 	public double eval(ArrayList<Double> vals) {
 		return Math.sin(vals.get(0));

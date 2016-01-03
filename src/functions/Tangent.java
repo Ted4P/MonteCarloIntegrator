@@ -11,7 +11,7 @@ public class Tangent extends Operand {
 		return 1;
 	}
 	
-	public int getOrderOps(){return 2;}
+	public int getOrderOps(){return 1;}
 
 	public double eval(ArrayList<Double> vals) {
 		return Math.tan(vals.get(0));
