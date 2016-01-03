@@ -28,8 +28,7 @@ public class Sqrt extends Operand {
 
 	@Override
 	public void simplify(Node node) {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
 
 }
