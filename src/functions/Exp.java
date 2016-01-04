@@ -23,13 +23,23 @@ public class Exp extends Operand {
 	public Node derive(ArrayList<Node> children, Character key) {
 		Node base = children.get(0);
 		Node exp = children.get(1);
-		if(base.hasVar(key)&&exp.hasVar(key)){ //Fancy X^X BS
-			return null;	// d/dx( f(x)^g(x) ) = f(x)^g(x) * d/dx( g(x) ) * ln( f(x) )
+		if(base.hasVar(key)&&exp.hasVar(key)){
+			//return null;	// d/dx( f(x)^g(x) ) = f(x)^g(x) * d/dx( g(x) ) * ln( f(x) )
                 				// + f(x)^( g(x)-1 ) * g(x) * d/dx( f(x) )
+			Node fg = new Node(new Exp(), base, exp);
+			Node dglnf = new Node(new Mul(), exp.derive(key), new Node(new Ln(), base, null));
+			Node top = new Node(new Mul(), fg, dglnf);
+			
+			Node gm	= new Node(new Sub(), exp, new Node(new Number(1)));
+			Node fgm = new Node(new Exp(), base, gm);
+			Node gdf = new Node(new Mul(), base, exp.derive(key));
+			Node bot = new Node(new Mul(), fgm, gdf);
+			
+			return new Node(new Add(), top, bot);
 		}
 		if(base.hasVar(key)){			//Power rule
 			Node ndx = new Node(new Mul(), exp, base.derive(key));	//ndX
-			Node nm	= new Node(new Sub(), exp, new Node(new Number(1),null,null));			//n-1
+			Node nm	= new Node(new Sub(), exp, new Node(new Number(1)));			//n-1
 			Node xn	= new Node(new Exp(), base, nm);			//X^nm
 			
 			return new Node(new Mul(), ndx, xn);
