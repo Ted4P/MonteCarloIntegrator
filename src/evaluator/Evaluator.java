@@ -33,7 +33,7 @@ public class Evaluator {
 	
 	public static void main(String[] args){
 		Evaluator eval = new Evaluator();
-		eval.parse("XSin(X)");
+		eval.parse("X^2");
 		eval.derive('X');
 		System.out.println(eval.toString());
 	}
