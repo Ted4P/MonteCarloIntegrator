@@ -65,4 +65,14 @@ public class EvaluatorTest {
 		eval.parse("(1)(7)");
 		assertEquals(7, eval.evaluate(), DOUBLE__TOL);
 	}
+	
+	@Test
+	public void testDerive() throws Exception{
+		Evaluator eval = new Evaluator();
+		eval.parse("XSin(X)");
+		eval.derive('X');
+		Map<Character, MutableDouble> vars = eval.getKeys();
+		vars.get('X').setVal(Math.PI);
+		assertEquals(-Math.PI, eval.evaluate(vars), DOUBLE__TOL);
+	}
 }

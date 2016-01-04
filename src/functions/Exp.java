@@ -24,7 +24,7 @@ public class Exp extends Operand {
 		Node base = children.get(0);
 		Node exp = children.get(1);
 		if(base.hasVar(key)&&exp.hasVar(key)){
-			//return null;	// d/dx( f(x)^g(x) ) = f(x)^g(x) * d/dx( g(x) ) * ln( f(x) )
+							// d/dx( f(x)^g(x) ) = f(x)^g(x) * d/dx( g(x) ) * ln( f(x) )
                 				// + f(x)^( g(x)-1 ) * g(x) * d/dx( f(x) )
 			Node fg = new Node(new Exp(), base, exp);
 			Node dglnf = new Node(new Mul(), exp.derive(key), new Node(new Ln(), base, null));
