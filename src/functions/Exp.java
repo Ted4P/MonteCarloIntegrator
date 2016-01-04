@@ -24,7 +24,8 @@ public class Exp extends Operand {
 		Node base = children.get(0);
 		Node exp = children.get(1);
 		if(base.hasVar(key)&&exp.hasVar(key)){ //Fancy X^X BS
-			return null;
+			return null;	// d/dx( f(x)^g(x) ) = f(x)^g(x) * d/dx( g(x) ) * ln( f(x) )
+                				// + f(x)^( g(x)-1 ) * g(x) * d/dx( f(x) )
 		}
 		if(base.hasVar(key)){			//Power rule
 			Node ndx = new Node(new Mul(), exp, base.derive(key));	//ndX
