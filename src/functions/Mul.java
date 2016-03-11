@@ -11,10 +11,15 @@ public class Mul extends Operand {
 		return 2;
 	}
 	
+	public boolean listVals(){return true;}
+	
 	public int getOrderOps(){return 3;}
 
 	public double eval(ArrayList<Double> vals) {
-		return vals.get(0)*vals.get(1);
+		double sum = 1;
+		
+		for(Double val: vals)	sum*=val;
+		return sum;
 	}
 
 	public String toString(){return "*";}
@@ -46,4 +51,5 @@ public class Mul extends Operand {
 		}
 		
 	}
+	
 }

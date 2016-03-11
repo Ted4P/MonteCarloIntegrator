@@ -8,4 +8,5 @@ public abstract class Operand implements Func{
 	public abstract double eval(ArrayList<Double> vals);
 	public abstract Node derive(ArrayList<Node> children, Character key);
 	public abstract void simplify(Node node);
+	public boolean listVals(){return false;}
 }

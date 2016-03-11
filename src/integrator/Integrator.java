@@ -2,6 +2,7 @@ package integrator;
 
 //Logic
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import evaluator.Evaluator;

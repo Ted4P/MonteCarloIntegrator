@@ -27,9 +27,12 @@ public class Sub extends Operand {
 	public void simplify(Node node) {
 		ArrayList<Node> children = node.getChildren();
 		try {
-			if(Math.abs(children.get(0).eval()) <DOUBLE_TOL) node.absorbChild(children.get(0));
+			if(Math.abs(children.get(0).eval()) <DOUBLE_TOL) node.absorbChild(children.get(1));
 		} catch (Exception e) {
 		}
-		
+		try {
+			if(Math.abs(children.get(1).eval()) <DOUBLE_TOL) node.absorbChild(children.get(0));
+		} catch (Exception e) {
+		}
 	}
 }
