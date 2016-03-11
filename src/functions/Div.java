@@ -35,7 +35,7 @@ public class Div extends Operand {
 		}
 		try {
 			double val = children.get(1).eval();
-			if(Math.abs(val) < DOUBLE_TOL) node.absorbChild(children.get(0));		//	X/1 == X
+			if(Math.abs(val-1) < DOUBLE_TOL) node.absorbChild(children.get(0));		//	X/1 == X
 		} catch (Exception e) {
 		}
 	}
