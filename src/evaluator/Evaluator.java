@@ -42,10 +42,8 @@ public class Evaluator {
 		for(int i = 1; i < degree; i++){
 			mainNode = mainNode.derive(key);
 			mainNode.simplify();
-			set.put(key, new MutableDouble(center));
 			derivatives[i] = mainNode.eval(set);
 		}
-		
 		Node TS = new Node(new Number(mainNode.eval(set)));
 		
 		for(int i = 1; i < degree; i++){
@@ -66,9 +64,10 @@ public class Evaluator {
 	}
 	public static void main(String[] args) throws Exception{
 		Evaluator eval = new Evaluator();
-		eval.parse("cos(X)");
-		eval.taylorSeries(5,0,'X');
+		eval.parse("e^(X)");
+		eval.taylorSeries(8,0,'X');
 		System.out.println(eval.toString());
+		
 		/*eval.parse("sin(X)*-1");
 		System.out.println(eval);
 		Map<Character, MutableDouble> set = new HashMap<Character, MutableDouble>();		//To evaluate derivatives
