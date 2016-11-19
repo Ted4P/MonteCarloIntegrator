@@ -1,4 +1,5 @@
 package evaluator;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,13 @@ public class Evaluator {
 		mainNode.simplify();
 	}
 	
+	public void partialDerive(ArrayList<Character> keys){
+		for(Character key: keys){		
+			derive(key);
+		}
+	}
+		
+	
 	public void taylorSeries(int degree, double center, Character key) throws Exception{
 		double[] derivatives = new double[degree];
 		
@@ -64,8 +72,13 @@ public class Evaluator {
 	}
 	public static void main(String[] args) throws Exception{
 		Evaluator eval = new Evaluator();
-		eval.parse("e^(X)");
-		eval.taylorSeries(8,0,'X');
+		eval.parse("e^(XY)");
+		ArrayList<Character> keys = new ArrayList<Character>();
+		keys.add('X');
+		keys.add('Y');
+		//keys.add('Y');
+		eval.partialDerive(keys);
+		//eval.taylorSeries(8,0,'X');
 		System.out.println(eval.toString());
 		
 		/*eval.parse("sin(X)*-1");
